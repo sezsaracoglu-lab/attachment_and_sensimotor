@@ -1,0 +1,2224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Attachment & Ethological Theory — Exam Study Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0d1b2a;
+    --dark: #111f30;
+    --mid: #1a2f47;
+    --card-bg: #162035;
+    --border: #243552;
+    --gold: #c9a84c;
+    --gold-light: #e8c86d;
+    --cream: #f0e6d3;
+    --muted: #8fa3b8;
+    --text: #d8e8f4;
+    --white: #ffffff;
+    --green: #4caf7d;
+    --red: #e05e5e;
+    --orange: #e07d3c;
+    --purple: #8b6bb1;
+    --teal: #3ba3a3;
+
+    --branch-a: #c9a84c;
+    --branch-b: #4caf7d;
+    --branch-c: #5b9bd5;
+    --branch-d: #e07d3c;
+    --branch-e: #c45fb5;
+    --branch-f: #3ba3a3;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--navy);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── LAYOUT ── */
+  .app-shell { display: flex; height: 100vh; overflow: hidden; }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    width: 280px;
+    min-width: 280px;
+    background: var(--dark);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    z-index: 10;
+  }
+
+  .sidebar-header {
+    padding: 24px 20px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .sidebar-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px;
+    font-style: italic;
+    color: var(--gold);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .sidebar-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--cream);
+    line-height: 1.2;
+  }
+
+  .sidebar-sub {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 6px;
+  }
+
+  .sidebar-section-label {
+    padding: 16px 20px 6px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: all 0.18s;
+    border-left: 3px solid transparent;
+    font-size: 13.5px;
+    font-weight: 400;
+    color: var(--muted);
+  }
+
+  .nav-item:hover { background: rgba(255,255,255,0.04); color: var(--text); }
+  .nav-item.active { background: rgba(201,168,76,0.08); color: var(--gold); border-left-color: var(--gold); }
+
+  .nav-badge {
+    margin-left: auto;
+    background: var(--mid);
+    border-radius: 10px;
+    font-size: 10px;
+    padding: 2px 7px;
+    font-family: 'DM Mono', monospace;
+    color: var(--muted);
+  }
+
+  .branch-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .progress-section {
+    margin-top: auto;
+    padding: 16px 20px;
+    border-top: 1px solid var(--border);
+  }
+
+  .progress-label {
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .progress-bar {
+    height: 4px;
+    background: var(--mid);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold), var(--gold-light));
+    border-radius: 4px;
+    transition: width 0.4s ease;
+  }
+
+  /* ── MAIN ── */
+  .main {
+    flex: 1;
+    overflow-y: auto;
+    background: var(--navy);
+  }
+
+  /* ── VIEWS ── */
+  .view { display: none; animation: fadeIn 0.3s ease; }
+  .view.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: linear-gradient(135deg, var(--dark) 0%, #0a1520 100%);
+    padding: 40px 48px 32px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(201,168,76,0.06) 0%, transparent 70%);
+  }
+
+  .hero-eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 10px;
+  }
+
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 38px;
+    font-weight: 700;
+    color: var(--cream);
+    line-height: 1.15;
+    margin-bottom: 10px;
+  }
+
+  .hero-sub {
+    font-size: 14px;
+    color: var(--muted);
+    max-width: 560px;
+    line-height: 1.6;
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 32px;
+    margin-top: 24px;
+  }
+
+  .stat {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--gold);
+  }
+
+  .stat-label {
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  /* ── BRANCH OVERVIEW GRID ── */
+  .branch-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    padding: 32px 48px;
+  }
+
+  .branch-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .branch-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--accent-color);
+  }
+
+  .branch-card:hover { transform: translateY(-2px); border-color: var(--accent-color); box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
+
+  .branch-letter {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 40px;
+    font-weight: 700;
+    color: var(--accent-color);
+    opacity: 0.35;
+    position: absolute;
+    top: 10px; right: 16px;
+  }
+
+  .branch-card-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent-color);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    margin-bottom: 6px;
+  }
+
+  .branch-card-desc {
+    font-size: 12.5px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .branch-card-count {
+    margin-top: 12px;
+    font-size: 11px;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* ── CONCEPT VIEW HEADER ── */
+  .view-header {
+    padding: 28px 48px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .view-header-back {
+    background: var(--mid);
+    border: none;
+    color: var(--muted);
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+  .view-header-back:hover { background: var(--border); color: var(--text); }
+
+  .view-header-info { flex: 1; }
+
+  .view-header-badge {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent-color);
+    margin-bottom: 4px;
+  }
+
+  .view-header-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--cream);
+  }
+
+  /* ── CONCEPT CARDS ── */
+  .concepts-container {
+    padding: 24px 48px 48px;
+    display: grid;
+    gap: 16px;
+  }
+
+  .concept-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .concept-card:hover { border-color: var(--accent-color); }
+
+  .concept-card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .concept-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    background: var(--mid);
+    padding: 3px 8px;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+
+  .concept-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--cream);
+    flex: 1;
+  }
+
+  .concept-tag {
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    flex-shrink: 0;
+  }
+
+  .expand-icon {
+    color: var(--muted);
+    font-size: 18px;
+    transition: transform 0.2s;
+    flex-shrink: 0;
+    line-height: 1;
+  }
+
+  .concept-card.open .expand-icon { transform: rotate(180deg); }
+
+  .concept-body {
+    display: none;
+    padding: 0 20px 20px;
+  }
+
+  .concept-card.open .concept-body { display: block; }
+
+  .concept-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  .concept-section {
+    background: var(--mid);
+    border-radius: 8px;
+    padding: 14px;
+  }
+
+  .concept-section.full { grid-column: 1 / -1; }
+
+  .concept-section-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .concept-section-text {
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.65;
+  }
+
+  .exam-box {
+    background: rgba(201,168,76,0.08);
+    border: 1px solid rgba(201,168,76,0.25);
+    border-radius: 8px;
+    padding: 14px;
+    margin-top: 12px;
+  }
+
+  .exam-box-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .exam-q { font-size: 13px; color: var(--gold-light); font-style: italic; margin-bottom: 8px; }
+
+  .model-a {
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.65;
+    border-top: 1px solid rgba(201,168,76,0.15);
+    padding-top: 8px;
+    margin-top: 8px;
+  }
+
+  /* ── TABLE VIEW ── */
+  .table-container { padding: 24px 48px 48px; }
+
+  .table-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+
+  .table-tab {
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--card-bg);
+    color: var(--muted);
+    font-size: 12.5px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.18s;
+  }
+
+  .table-tab:hover { border-color: var(--gold); color: var(--text); }
+  .table-tab.active { background: rgba(201,168,76,0.12); border-color: var(--gold); color: var(--gold); }
+
+  .data-table-wrap { overflow-x: auto; }
+
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12.5px;
+  }
+
+  .data-table thead tr {
+    background: var(--mid);
+    border-bottom: 2px solid var(--gold);
+  }
+
+  .data-table th {
+    padding: 12px 14px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--gold);
+    white-space: nowrap;
+  }
+
+  .data-table td {
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    vertical-align: top;
+    line-height: 1.5;
+  }
+
+  .data-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+  .type-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 600;
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* ── QUIZ VIEW ── */
+  .quiz-container { padding: 32px 48px 48px; max-width: 720px; margin: 0 auto; }
+
+  .quiz-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+
+  .quiz-meta { font-size: 12px; color: var(--muted); }
+
+  .quiz-filter {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+
+  .filter-btn {
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.18s;
+    font-family: 'DM Sans', sans-serif;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .filter-btn:hover { border-color: var(--gold); color: var(--gold); }
+  .filter-btn.active { background: rgba(201,168,76,0.12); border-color: var(--gold); color: var(--gold); }
+
+  .flashcard {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    min-height: 280px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 32px;
+    text-align: center;
+    cursor: pointer;
+    position: relative;
+    perspective: 1000px;
+    transition: border-color 0.2s;
+  }
+
+  .flashcard:hover { border-color: var(--gold); }
+
+  .flashcard-inner {
+    width: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.5s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  .flashcard.flipped .flashcard-inner { transform: rotateY(180deg); }
+
+  .flashcard-front, .flashcard-back {
+    backface-visibility: hidden;
+  }
+
+  .flashcard-back {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    transform: rotateY(180deg);
+  }
+
+  .fc-branch {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .fc-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  .fc-question {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--cream);
+    line-height: 1.3;
+    margin-bottom: 8px;
+  }
+
+  .fc-hint {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 16px;
+  }
+
+  .fc-answer-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 10px;
+  }
+
+  .fc-definition {
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.6;
+    margin-bottom: 12px;
+  }
+
+  .fc-example {
+    font-size: 12.5px;
+    color: var(--muted);
+    font-style: italic;
+    line-height: 1.5;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+  }
+
+  .quiz-controls {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .quiz-btn {
+    padding: 10px 24px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--card-bg);
+    color: var(--text);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.18s;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .quiz-btn:hover { border-color: var(--gold); color: var(--gold); }
+
+  .quiz-btn.primary {
+    background: rgba(201,168,76,0.15);
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+
+  .quiz-btn.primary:hover { background: rgba(201,168,76,0.25); }
+
+  .quiz-progress-track {
+    display: flex;
+    gap: 3px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+
+  .qp-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--border);
+    transition: background 0.2s;
+  }
+
+  .qp-dot.done { background: var(--gold); }
+  .qp-dot.current { background: var(--gold-light); }
+
+  /* ── MISTAKES VIEW ── */
+  .mistakes-container { padding: 24px 48px 48px; }
+
+  .mistake-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--red);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 14px;
+    transition: border-color 0.2s;
+  }
+
+  .mistake-card:hover { border-color: rgba(224,94,94,0.6); }
+
+  .mistake-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  .mistake-icon {
+    font-size: 18px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .mistake-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--cream);
+    line-height: 1.3;
+  }
+
+  .mistake-wrong {
+    background: rgba(224,94,94,0.07);
+    border: 1px solid rgba(224,94,94,0.2);
+    border-radius: 6px;
+    padding: 10px 12px;
+    font-size: 12.5px;
+    color: #e8a0a0;
+    line-height: 1.5;
+    margin-bottom: 8px;
+  }
+
+  .mistake-wrong-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 4px;
+  }
+
+  .mistake-correct {
+    background: rgba(76,175,125,0.07);
+    border: 1px solid rgba(76,175,125,0.2);
+    border-radius: 6px;
+    padding: 10px 12px;
+    font-size: 12.5px;
+    color: #92dbb6;
+    line-height: 1.5;
+  }
+
+  .mistake-correct-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--green);
+    margin-bottom: 4px;
+  }
+
+  /* ── DIAGRAM VIEW ── */
+  .diagram-container { padding: 24px 48px 48px; }
+
+  .diagram-section { margin-bottom: 48px; }
+
+  .diagram-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--cream);
+    margin-bottom: 6px;
+  }
+
+  .diagram-sub {
+    font-size: 12.5px;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+
+  /* Ainsworth Types Visual */
+  .attachment-types-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+  }
+
+  .att-type-card {
+    border-radius: 12px;
+    padding: 16px;
+    border: 2px solid;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .att-type-card .type-pct {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px;
+    font-weight: 700;
+    opacity: 0.9;
+    margin-bottom: 2px;
+  }
+
+  .att-type-card .type-name {
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+
+  .att-type-card .type-rows { display: flex; flex-direction: column; gap: 6px; }
+
+  .type-row-label {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.6;
+    margin-bottom: 2px;
+  }
+
+  .type-row-val { font-size: 11.5px; line-height: 1.4; }
+
+  /* Schaffer Phases Timeline */
+  .phases-timeline {
+    position: relative;
+    padding-left: 32px;
+  }
+
+  .phases-timeline::before {
+    content: '';
+    position: absolute;
+    left: 10px; top: 8px; bottom: 8px;
+    width: 2px;
+    background: linear-gradient(180deg, var(--branch-c), var(--branch-a));
+  }
+
+  .phase-item {
+    position: relative;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin-bottom: 12px;
+    transition: border-color 0.2s;
+  }
+
+  .phase-item:hover { border-color: var(--branch-c); }
+
+  .phase-item::before {
+    content: '';
+    position: absolute;
+    left: -27px; top: 20px;
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background: var(--branch-c);
+    border: 2px solid var(--navy);
+  }
+
+  .phase-num { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); margin-bottom: 4px; }
+  .phase-name { font-size: 15px; font-weight: 600; color: var(--cream); margin-bottom: 4px; }
+  .phase-age { font-size: 12px; color: var(--branch-c); margin-bottom: 6px; }
+  .phase-desc { font-size: 12.5px; color: var(--muted); line-height: 1.5; }
+
+  /* AAI ↔ Strange Situation transmission chart */
+  .transmission-chart {
+    display: grid;
+    grid-template-columns: 1fr 60px 1fr;
+    gap: 0;
+    align-items: center;
+  }
+
+  .trans-col { display: flex; flex-direction: column; gap: 8px; }
+  .trans-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+    text-align: center;
+  }
+
+  .trans-item {
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 12.5px;
+    font-weight: 500;
+    text-align: center;
+  }
+
+  .trans-arrows { display: flex; flex-direction: column; gap: 8px; align-items: center; padding-top: 28px; }
+  .trans-arrow { font-size: 18px; color: var(--muted); }
+
+  /* ── SEARCH ── */
+  .search-bar {
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .search-input {
+    width: 100%;
+    background: var(--mid);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 14px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .search-input::placeholder { color: var(--muted); }
+  .search-input:focus { border-color: var(--gold); }
+
+  /* Responsive hints */
+  .tip-box {
+    background: rgba(201,168,76,0.05);
+    border: 1px dashed rgba(201,168,76,0.25);
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 12px;
+    color: var(--muted);
+    margin: 0 48px 24px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  /* Highlight key terms */
+  .hl { color: var(--gold-light); font-weight: 600; }
+  .hl-g { color: #7ecfa0; font-weight: 600; }
+  .hl-r { color: #e8a0a0; font-weight: 600; }
+  .hl-b { color: #7ab8e8; font-weight: 600; }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+
+  /* Mobile */
+  @media (max-width: 900px) {
+    .sidebar { width: 220px; min-width: 220px; }
+    .hero { padding: 28px 28px 24px; }
+    .hero-title { font-size: 28px; }
+    .branch-grid { grid-template-columns: 1fr; padding: 24px 28px; }
+    .concepts-container { padding: 16px 28px 40px; }
+    .quiz-container { padding: 24px 28px; }
+    .table-container { padding: 16px 28px 40px; }
+    .mistakes-container { padding: 16px 28px 40px; }
+    .diagram-container { padding: 16px 28px 40px; }
+    .view-header { padding: 20px 28px 16px; }
+    .attachment-types-grid { grid-template-columns: 1fr 1fr; }
+    .concept-grid { grid-template-columns: 1fr; }
+    .hero-stats { gap: 20px; }
+    .tip-box { margin: 0 28px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="app-shell">
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">Developmental Psychology</div>
+      <div class="sidebar-title">Attachment & Ethology</div>
+      <div class="sidebar-sub">Leman & Bremner Ch.7 · Miller 2001</div>
+    </div>
+
+    <div class="sidebar-section-label">Study Branches</div>
+
+    <div class="nav-item active" data-view="home" onclick="showView('home')">
+      <span>🏠</span> Overview
+    </div>
+
+    <div class="nav-item" data-view="branchA" onclick="showBranch('A')" style="--accent: var(--branch-a)">
+      <span class="branch-dot" style="background:var(--branch-a)"></span> Ethological Foundations
+      <span class="nav-badge">8</span>
+    </div>
+    <div class="nav-item" data-view="branchB" onclick="showBranch('B')">
+      <span class="branch-dot" style="background:var(--branch-b)"></span> Theories of Attachment
+      <span class="nav-badge">8</span>
+    </div>
+    <div class="nav-item" data-view="branchC" onclick="showBranch('C')">
+      <span class="branch-dot" style="background:var(--branch-c)"></span> Development of Attachment
+      <span class="nav-badge">5</span>
+    </div>
+    <div class="nav-item" data-view="branchD" onclick="showBranch('D')">
+      <span class="branch-dot" style="background:var(--branch-d)"></span> Quality & Measurement
+      <span class="nav-badge">9</span>
+    </div>
+    <div class="nav-item" data-view="branchE" onclick="showBranch('E')">
+      <span class="branch-dot" style="background:var(--branch-e)"></span> Influences on Attachment
+      <span class="nav-badge">5</span>
+    </div>
+    <div class="nav-item" data-view="branchF" onclick="showBranch('F')">
+      <span class="branch-dot" style="background:var(--branch-f)"></span> Stability & Outcomes
+      <span class="nav-badge">5</span>
+    </div>
+
+    <div class="sidebar-section-label">Study Tools</div>
+
+    <div class="nav-item" onclick="showView('diagrams')">
+      <span>📊</span> Visual Diagrams
+    </div>
+    <div class="nav-item" onclick="showView('tables')">
+      <span>📋</span> Quick Reference Tables
+    </div>
+    <div class="nav-item" onclick="showView('quiz')">
+      <span>🎯</span> Flashcard Quiz
+    </div>
+    <div class="nav-item" onclick="showView('mistakes')">
+      <span>⚠️</span> Common Mistakes
+    </div>
+
+    <div class="progress-section">
+      <div class="progress-label">
+        <span>Cards Viewed</span>
+        <span id="progress-count">0 / 40</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main class="main">
+
+    <!-- HOME VIEW -->
+    <div id="view-home" class="view active">
+      <div class="hero">
+        <div class="hero-eyebrow">📖 Exam Study Platform · Developmental Psychology</div>
+        <div class="hero-title">Attachment & Ethological Theory</div>
+        <div class="hero-sub">Complete exam preparation covering all 40 high-yield concepts from Leman & Bremner (2019) Chapter 7 and Miller (2001). Every concept includes definition, explanation, example, exam question, and model answer.</div>
+        <div class="hero-stats">
+          <div class="stat"><div class="stat-num">40</div><div class="stat-label">Key Concepts</div></div>
+          <div class="stat"><div class="stat-num">6</div><div class="stat-label">Branches</div></div>
+          <div class="stat"><div class="stat-num">8</div><div class="stat-label">Common Mistakes</div></div>
+          <div class="stat"><div class="stat-num">4</div><div class="stat-label">Reference Tables</div></div>
+        </div>
+      </div>
+
+      <div class="branch-grid">
+        <div class="branch-card" style="--accent-color: var(--branch-a)" onclick="showBranch('A')">
+          <div class="branch-letter">A</div>
+          <div class="branch-card-title">Ethological Foundations</div>
+          <div class="branch-card-desc">Innate behaviours, Fixed Action Patterns, imprinting, sensitive periods, and the evolutionary basis of attachment</div>
+          <div class="branch-card-count">8 concepts · #1–6, #34–35</div>
+        </div>
+        <div class="branch-card" style="--accent-color: var(--branch-b)" onclick="showBranch('B')">
+          <div class="branch-letter">B</div>
+          <div class="branch-card-title">Theories of Attachment</div>
+          <div class="branch-card-desc">Psychoanalytic, Learning Theory, Bowlby's Ethological Theory, Cognitive-Developmental approach, and IWMs</div>
+          <div class="branch-card-count">8 concepts · #7–12, #38–39</div>
+        </div>
+        <div class="branch-card" style="--accent-color: var(--branch-c)" onclick="showBranch('C')">
+          <div class="branch-letter">C</div>
+          <div class="branch-card-title">Development of Attachment</div>
+          <div class="branch-card-desc">Schaffer's 4 phases, multiple attachments, father-infant attachment, separation protest, goal-corrected partnership</div>
+          <div class="branch-card-count">5 concepts · #13–15, #36–37</div>
+        </div>
+        <div class="branch-card" style="--accent-color: var(--branch-d)" onclick="showBranch('D')">
+          <div class="branch-letter">D</div>
+          <div class="branch-card-title">Quality & Measurement</div>
+          <div class="branch-card-desc">Secure base, Strange Situation, all 4 attachment types, AQS, cross-cultural validity, approach/avoidance</div>
+          <div class="branch-card-count">9 concepts · #16–23, #33</div>
+        </div>
+        <div class="branch-card" style="--accent-color: var(--branch-e)" onclick="showBranch('E')">
+          <div class="branch-letter">E</div>
+          <div class="branch-card-title">Influences on Attachment</div>
+          <div class="branch-card-desc">Sensitive caregiving, temperament, intergenerational transmission, earned security, Adult Attachment Interview</div>
+          <div class="branch-card-count">5 concepts · #24–28</div>
+        </div>
+        <div class="branch-card" style="--accent-color: var(--branch-f)" onclick="showBranch('F')">
+          <div class="branch-letter">F</div>
+          <div class="branch-card-title">Stability & Outcomes</div>
+          <div class="branch-card-desc">Stability of attachment classification, cognitive, social, and emotional outcomes; child care effects; kibbutz research</div>
+          <div class="branch-card-count">5 concepts · #29–32, #40</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BRANCH VIEWS (A–F) -->
+    <div id="view-branch" class="view">
+      <div class="view-header" id="branch-view-header">
+        <button class="view-header-back" onclick="showView('home')">←</button>
+        <div class="view-header-info">
+          <div class="view-header-badge" id="branch-view-badge">Branch A</div>
+          <div class="view-header-title" id="branch-view-title">Ethological Foundations</div>
+        </div>
+      </div>
+      <div class="tip-box">💡 Click any concept card to expand its full content. Open the Exam Q section to practise model answers.</div>
+      <div class="concepts-container" id="branch-concepts"></div>
+    </div>
+
+    <!-- DIAGRAMS VIEW -->
+    <div id="view-diagrams" class="view">
+      <div class="view-header">
+        <button class="view-header-back" onclick="showView('home')">←</button>
+        <div class="view-header-info">
+          <div class="view-header-badge" style="color:var(--gold)">Visual Learning</div>
+          <div class="view-header-title">Diagrams & Visual Summaries</div>
+        </div>
+      </div>
+
+      <div class="diagram-container">
+
+        <!-- Ainsworth Types -->
+        <div class="diagram-section">
+          <div class="diagram-title">Ainsworth Attachment Classifications</div>
+          <div class="diagram-sub">Strange Situation outcomes · % US samples · behaviours & predictors</div>
+          <div class="attachment-types-grid">
+
+            <div class="att-type-card" style="border-color:#4caf7d; background:rgba(76,175,125,0.07)">
+              <div class="type-pct" style="color:#4caf7d">60–65%</div>
+              <div class="type-name" style="color:#7ecfa0">✅ Secure</div>
+              <div class="type-rows">
+                <div>
+                  <div class="type-row-label">Separation</div>
+                  <div class="type-row-val">Some distress; continues exploring</div>
+                </div>
+                <div>
+                  <div class="type-row-label">Reunion</div>
+                  <div class="type-row-val">Seeks contact; quickly comforted; returns to play</div>
+                </div>
+                <div>
+                  <div class="type-row-label">Parenting</div>
+                  <div class="type-row-val">Sensitive, responsive, consistently available</div>
+                </div>
+                <div>
+                  <div class="type-row-label">IWM</div>
+                  <div class="type-row-val">"I'm lovable; others are trustworthy"</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="att-type-card" style="border-color:#5b9bd5; background:rgba(91,155,213,0.07)">
+              <div class="type-pct" style="color:#5b9bd5">~20%</div>
+              <div class="type-name" style="color:#7ab8e8">🔵 Insecure-Avoidant</div>
+              <div class="type-rows">
+                <div>
+                  <div class="type-row-label">Separation</div>
+                  <div class="type-row-val">Little visible distress (cortisol elevated)</div>
+                </div>
+                <div>
+                  <div class="type-row-label">Reunion</div>
+                  <div class="type-row-val">Ignores/avoids; turns away; plays with toys</div>
+                </div>
+                <div>
+                  <div class="type-row-label">Parenting</div>
+                  <div class="type-row-val">Unavailable, rejecting, unresponsive to signals</div>
+                </div>
+                <div>
+                  <div class="type-row-label">Strategy</div>
+                  <div class="type-row-val">Deactivates attachment system</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="att-type-card" style="border-color:#e0b03c; background:rgba(224,176,60,0.07)">
+              <div class="type-pct" style="color:#e0b03c">10–15%</div>
+              <div class="type-name" style="color:#e8c86d">🟡 Insecure-Resistant</div>
+              <div class="type-rows">
+                <div>
+                  <div class="type-row-label">Separation</div>
+                  <div class="type-row-val">Extremely distressed; cannot self-soothe</div>
+                </div>
+                <div>
+                  <div class="type-row-label">Reunion</div>
+                  <div class="type-row-val">Seeks AND angrily resists; cannot return to play</div>
+                </div>
+                <div>
+                  <div class="type-row-label">Parenting</div>
+                  <div class="type-row-val">Inconsistently available; unpredictable responses</div>
+                </div>
+                <div>
+                  <div class="type-row-label">Strategy</div>
+                  <div class="type-row-val">Hyperactivates attachment system</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="att-type-card" style="border-color:#e05e5e; background:rgba(224,94,94,0.07)">
+              <div class="type-pct" style="color:#e05e5e">15–20%</div>
+              <div class="type-name" style="color:#e8a0a0">🔴 Insecure-Disorganised</div>
+              <div class="type-rows">
+                <div>
+                  <div class="type-row-label">Separation</div>
+                  <div class="type-row-val">Contradictory; freeze responses</div>
+                </div>
+                <div>
+                  <div class="type-row-label">Reunion</div>
+                  <div class="type-row-val">Approach-avoidance; disoriented; freezing</div>
+                </div>
+                <div>
+                  <div class="type-row-label">Parenting</div>
+                  <div class="type-row-val">Frightening/frightened; abusive; depressed</div>
+                </div>
+                <div>
+                  <div class="type-row-label">Risk</div>
+                  <div class="type-row-val">82% in maltreated; highest psychopathology risk</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Schaffer's Phases -->
+        <div class="diagram-section">
+          <div class="diagram-title">Schaffer's 4 Phases of Attachment Development</div>
+          <div class="diagram-sub">Sequential development of the attachment bond from birth to 2+ years</div>
+          <div class="phases-timeline">
+            <div class="phase-item">
+              <div class="phase-num">Phase 1</div>
+              <div class="phase-name">Preattachment</div>
+              <div class="phase-age">0 – 2 months</div>
+              <div class="phase-desc"><span class="hl-b">Indiscriminate social responsiveness.</span> Baby responds to all humans similarly. No separation protest. Limited cognitive differentiation between people.</div>
+            </div>
+            <div class="phase-item">
+              <div class="phase-num">Phase 2</div>
+              <div class="phase-name">Attachment-in-the-Making</div>
+              <div class="phase-age">2 – 7 months</div>
+              <div class="phase-desc">Baby recognises familiar caregivers by face, voice, smell. Responds differently to them — but <span class="hl">still no separation protest</span>. Perceptual discrimination established; no object permanence yet.</div>
+            </div>
+            <div class="phase-item">
+              <div class="phase-num">Phase 3</div>
+              <div class="phase-name">Clear-Cut Attachment</div>
+              <div class="phase-age">7 – 24 months</div>
+              <div class="phase-desc"><span class="hl">Specific attachments form.</span> Separation protest appears (~7–9m). Stranger anxiety begins. Active proximity-seeking. Requires <span class="hl-b">object permanence</span> — infant can now "miss" someone.</div>
+            </div>
+            <div class="phase-item">
+              <div class="phase-num">Phase 4</div>
+              <div class="phase-name">Goal-Corrected Partnership</div>
+              <div class="phase-age">24+ months</div>
+              <div class="phase-desc">Child understands caregivers' goals and plans. Negotiates separations cooperatively. Language replaces proximity. Less distress when reasons are given. Requires <span class="hl-b">theory of mind precursors</span>.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Intergenerational Transmission -->
+        <div class="diagram-section">
+          <div class="diagram-title">Intergenerational Transmission of Attachment</div>
+          <div class="diagram-sub">AAI parental classification → Infant Strange Situation classification (Main et al. 1985)</div>
+          <div class="transmission-chart">
+            <div class="trans-col">
+              <div class="trans-label">Parent — AAI Classification</div>
+              <div class="trans-item" style="background:rgba(76,175,125,0.15); border:1px solid rgba(76,175,125,0.4); color:#7ecfa0;">🟢 Autonomous (F)<br><small style="opacity:0.7">Balanced, open recall of both positive and negative memories</small></div>
+              <div class="trans-item" style="background:rgba(91,155,213,0.15); border:1px solid rgba(91,155,213,0.4); color:#7ab8e8;">🔵 Dismissing (Ds)<br><small style="opacity:0.7">Devalues attachment; poor recall; idealises or dismisses childhood</small></div>
+              <div class="trans-item" style="background:rgba(224,176,60,0.15); border:1px solid rgba(224,176,60,0.4); color:#e8c86d;">🟡 Preoccupied (E)<br><small style="opacity:0.7">Still entangled in childhood conflicts; confused, conflict-ridden recall</small></div>
+              <div class="trans-item" style="background:rgba(224,94,94,0.15); border:1px solid rgba(224,94,94,0.4); color:#e8a0a0;">🔴 Unresolved (U)<br><small style="opacity:0.7">Disorganised processing of loss or trauma in childhood</small></div>
+            </div>
+            <div class="trans-arrows">
+              <div style="height:20px"></div>
+              <div class="trans-arrow">→</div>
+              <div class="trans-arrow">→</div>
+              <div class="trans-arrow">→</div>
+              <div class="trans-arrow">→</div>
+            </div>
+            <div class="trans-col">
+              <div class="trans-label">Infant — Strange Situation</div>
+              <div class="trans-item" style="background:rgba(76,175,125,0.15); border:1px solid rgba(76,175,125,0.4); color:#7ecfa0;">✅ Secure (B)<br><small style="opacity:0.7">Seeks contact; quickly comforted; returns to play</small></div>
+              <div class="trans-item" style="background:rgba(91,155,213,0.15); border:1px solid rgba(91,155,213,0.4); color:#7ab8e8;">🔵 Avoidant (A)<br><small style="opacity:0.7">Ignores/avoids caregiver on reunion; appears self-sufficient</small></div>
+              <div class="trans-item" style="background:rgba(224,176,60,0.15); border:1px solid rgba(224,176,60,0.4); color:#e8c86d;">🟡 Resistant (C)<br><small style="opacity:0.7">Seeks AND angrily resists; cannot be comforted</small></div>
+              <div class="trans-item" style="background:rgba(224,94,94,0.15); border:1px solid rgba(224,94,94,0.4); color:#e8a0a0;">🔴 Disorganised (D)<br><small style="opacity:0.7">Approach-avoidance; freezing; no coherent strategy</small></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Theories Comparison Visual -->
+        <div class="diagram-section">
+          <div class="diagram-title">Four Theories of Attachment — At a Glance</div>
+          <div class="diagram-sub">Which theory explains what, and how is each criticised?</div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+            <div style="background:var(--card-bg); border:1px solid var(--border); border-left:4px solid #c45fb5; border-radius:10px; padding:16px;">
+              <div style="font-size:11px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:#c45fb5; margin-bottom:6px;">Psychoanalytic (Freud)</div>
+              <div style="font-size:13px; color:var(--text); margin-bottom:8px;"><strong>Mechanism:</strong> Oral drive gratification — caregiver = pleasure through feeding</div>
+              <div style="font-size:12px; color:#e8a0a0; background:rgba(224,94,94,0.07); padding:8px; border-radius:6px;">❌ Disproved by Harlow (cloth &gt; wire mother) &amp; Schaffer &amp; Emerson (attachment ≠ feeding)</div>
+            </div>
+            <div style="background:var(--card-bg); border:1px solid var(--border); border-left:4px solid #5b9bd5; border-radius:10px; padding:16px;">
+              <div style="font-size:11px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:#5b9bd5; margin-bottom:6px;">Learning Theory (Dollard/Gewirtz)</div>
+              <div style="font-size:13px; color:var(--text); margin-bottom:8px;"><strong>Mechanism:</strong> Classical/operant conditioning — caregiver reduces hunger = secondary reinforcer</div>
+              <div style="font-size:12px; color:#e8a0a0; background:rgba(224,94,94,0.07); padding:8px; border-radius:6px;">❌ Harlow: food ≠ attachment. Schaffer &amp; Emerson: responsive father &gt; feeding mother</div>
+            </div>
+            <div style="background:var(--card-bg); border:1px solid var(--border); border-left:4px solid #4caf7d; border-radius:10px; padding:16px;">
+              <div style="font-size:11px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:#4caf7d; margin-bottom:6px;">Ethological / Bowlby</div>
+              <div style="font-size:13px; color:var(--text); margin-bottom:8px;"><strong>Mechanism:</strong> Evolutionary — innate signalling system; mutual biological preparedness; IWMs; control systems</div>
+              <div style="font-size:12px; color:#92dbb6; background:rgba(76,175,125,0.07); padding:8px; border-radius:6px;">✅ Best supported. Cross-cultural evidence; blind/deaf infants social smile; Ainsworth Strange Situation</div>
+            </div>
+            <div style="background:var(--card-bg); border:1px solid var(--border); border-left:4px solid var(--branch-c); border-radius:10px; padding:16px;">
+              <div style="font-size:11px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:var(--branch-c); margin-bottom:6px;">Cognitive-Developmental (Piaget)</div>
+              <div style="font-size:13px; color:var(--text); margin-bottom:8px;"><strong>Mechanism:</strong> Object permanence prerequisite — infant must know caregiver exists to "miss" them</div>
+              <div style="font-size:12px; color:#7ab8e8; background:rgba(91,155,213,0.07); padding:8px; border-radius:6px;">⚠️ Cannot fully explain onset alone; object permanence not fully present at 7–9m. Useful complement.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Neonatal Reflexes -->
+        <div class="diagram-section">
+          <div class="diagram-title">Neonatal Reflexes at a Glance</div>
+          <div class="diagram-sub">Leman & Bremner (2019) · Permanent vs Temporary reflexes</div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+            <div style="background:var(--card-bg); border:1px solid var(--border); border-radius:10px; overflow:hidden;">
+              <div style="background:var(--mid); padding:10px 16px; font-size:11px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:var(--branch-f);">Permanent Reflexes</div>
+              <div style="padding:12px 16px; display:flex; flex-direction:column; gap:8px;">
+                <div style="font-size:12.5px; border-bottom:1px solid var(--border); padding-bottom:6px;"><strong style="color:var(--cream);">Eye blink</strong> — bright light → protects eyes</div>
+                <div style="font-size:12.5px; border-bottom:1px solid var(--border); padding-bottom:6px;"><strong style="color:var(--cream);">Biceps reflex</strong> — tap tendon → short contraction; absent in depressed babies</div>
+                <div style="font-size:12.5px;"><strong style="color:var(--cream);">Withdrawal reflex</strong> — prick sole → withdraws foot; bends knee/hip</div>
+              </div>
+            </div>
+            <div style="background:var(--card-bg); border:1px solid var(--border); border-radius:10px; overflow:hidden;">
+              <div style="background:var(--mid); padding:10px 16px; font-size:11px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:var(--branch-d);">Temporary Reflexes</div>
+              <div style="padding:12px 16px; display:flex; flex-direction:column; gap:6px;">
+                <div style="font-size:12px; border-bottom:1px solid var(--border); padding-bottom:5px;"><strong style="color:var(--cream);">Rooting</strong> — stroke cheek → turns, opens mouth (→ voluntary ~3-4m)</div>
+                <div style="font-size:12px; border-bottom:1px solid var(--border); padding-bottom:5px;"><strong style="color:var(--cream);">Sucking</strong> — object in mouth → rhythmic suck (disappears ~6m)</div>
+                <div style="font-size:12px; border-bottom:1px solid var(--border); padding-bottom:5px;"><strong style="color:var(--cream);">Palmar grasp</strong> — press palm → grasps (→ voluntary ~3-4m)</div>
+                <div style="font-size:12px; border-bottom:1px solid var(--border); padding-bottom:5px;"><strong style="color:var(--cream);">Moro</strong> — sudden drop → arms out then hug (disappears ~6-7m)</div>
+                <div style="font-size:12px; border-bottom:1px solid var(--border); padding-bottom:5px;"><strong style="color:var(--cream);">Stepping</strong> — upright support → rhythmic steps (disappears ~3-4m)</div>
+                <div style="font-size:12px;"><strong style="color:var(--cream);">Babinski</strong> — stroke foot → big toe up (disappears ~end year 1)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- TABLES VIEW -->
+    <div id="view-tables" class="view">
+      <div class="view-header">
+        <button class="view-header-back" onclick="showView('home')">←</button>
+        <div class="view-header-info">
+          <div class="view-header-badge" style="color:var(--gold)">Quick Reference</div>
+          <div class="view-header-title">Reference Tables</div>
+        </div>
+      </div>
+      <div class="table-container">
+        <div class="table-tabs">
+          <div class="table-tab active" onclick="showTable(0)">Table 1: Theories Comparison</div>
+          <div class="table-tab" onclick="showTable(1)">Table 2: Ainsworth Classifications</div>
+          <div class="table-tab" onclick="showTable(2)">Table 3: Schaffer's Phases</div>
+          <div class="table-tab" onclick="showTable(3)">Table 4: Ethological Concepts</div>
+          <div class="table-tab" onclick="showTable(4)">Table 5: PND Effects</div>
+        </div>
+
+        <!-- Table 1 -->
+        <div class="data-table-wrap table-content active" id="table-0">
+          <table class="data-table">
+            <thead><tr><th>Theory</th><th>Theorist(s)</th><th>Core Mechanism</th><th>Key Evidence For</th><th>Key Critique / Against</th></tr></thead>
+            <tbody>
+              <tr><td><strong style="color:#c45fb5">Psychoanalytic</strong></td><td>Freud</td><td>Oral drive gratification; caregiver = pleasure source through feeding</td><td>Emphasis on inner needs; links to neuroscience (Birnbaum & Reis, 2019)</td><td>Harlow: cloth&gt;wire mother; Schaffer & Emerson: attachment ≠ feeding</td></tr>
+              <tr><td><strong style="color:var(--branch-c)">Learning Theory</strong></td><td>Dollard; Sears; Gewirtz</td><td>Hunger reduction (primary reinforcer) → caregiver = secondary reinforcer; stimulation as basis</td><td>Explains gradual development; responsive interactions build bond</td><td>Harlow (1959): food ≠ attachment; Schaffer & Emerson (1964): responsive father &gt; feeding mother</td></tr>
+              <tr><td><strong style="color:var(--branch-b)">Ethological (Bowlby)</strong></td><td>Bowlby (1958, 1969, 1973)</td><td>Evolutionary; innate signalling system; mutual biological preparedness; control systems; IWMs</td><td>Cross-cultural evidence; blind/deaf infants show social smiling; Ainsworth Strange Situation research</td><td>Some behaviours (smiling) have social as well as biological origins; difficult to test IWM constructs</td></tr>
+              <tr><td><strong style="color:var(--branch-c)">Cognitive-Developmental</strong></td><td>Piaget (indirectly)</td><td>Object permanence prerequisite; cognitive advances shift nature of attachment across development</td><td>Onset of Phase 3 coincides with object permanence (~7-9m); Phase 4 requires theory of mind</td><td>Cannot fully explain onset of attachment (object permanence not fully present at 7-9m)</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Table 2 -->
+        <div class="data-table-wrap table-content" id="table-1" style="display:none">
+          <table class="data-table">
+            <thead><tr><th>Type</th><th>% (US)</th><th>Separation Behaviour</th><th>Reunion Behaviour</th><th>Parenting Style</th><th>Outcomes</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><span class="type-badge" style="background:rgba(76,175,125,0.2); color:#7ecfa0">Secure</span></td>
+                <td>60–65%</td>
+                <td>Some distress; continues exploring</td>
+                <td>Seeks contact; quickly comforted; returns to play</td>
+                <td>Sensitive, responsive, consistently available</td>
+                <td>Best cognitive, social, emotional outcomes</td>
+              </tr>
+              <tr>
+                <td><span class="type-badge" style="background:rgba(91,155,213,0.2); color:#7ab8e8">Avoidant</span></td>
+                <td>~20%</td>
+                <td>Little visible distress (but cortisol elevated)</td>
+                <td>Ignores/avoids; turns away; occupies self with toys</td>
+                <td>Unavailable, rejecting, unresponsive to signals</td>
+                <td>More aggressive, less empathic; suppressed emotional expression</td>
+              </tr>
+              <tr>
+                <td><span class="type-badge" style="background:rgba(224,176,60,0.2); color:#e8c86d">Resistant</span></td>
+                <td>10–15%</td>
+                <td>Extremely distressed; cannot self-soothe</td>
+                <td>Seeks AND angrily resists contact; inconsolable; can't return to play</td>
+                <td>Inconsistently available; unpredictable responsiveness</td>
+                <td>Anxious, clingy, less peer competent</td>
+              </tr>
+              <tr>
+                <td><span class="type-badge" style="background:rgba(224,94,94,0.2); color:#e8a0a0">Disorganised</span></td>
+                <td>15–20%</td>
+                <td>Contradictory; freeze responses</td>
+                <td>Approach-avoidance; disoriented; freezing; stereotyped movements</td>
+                <td>Frightening/frightened; neglectful; abusive; severely depressed</td>
+                <td>Highest risk of psychopathology; conduct problems; poor outcomes</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Table 3 -->
+        <div class="data-table-wrap table-content" id="table-2" style="display:none">
+          <table class="data-table">
+            <thead><tr><th>#</th><th>Phase</th><th>Age</th><th>Principal Features</th><th>Cognitive / Developmental Links</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td><strong>Preattachment</strong></td><td>0–2 months</td><td>Indiscriminate social responsiveness; responds to all humans similarly; no separation protest</td><td>Limited cognitive differentiation; all humans equally 'social'</td></tr>
+              <tr><td>2</td><td><strong>Attachment-in-the-Making</strong></td><td>2–7 months</td><td>Recognises familiar caregivers (face, voice, smell); responds differently; still no protest at separation</td><td>Perceptual discrimination develops; facial/voice recognition by 6 months; but no object permanence yet</td></tr>
+              <tr><td>3</td><td><strong>Clear-Cut Attachment</strong></td><td>7–24 months</td><td>Specific attachments to particular individuals; separation protest; stranger anxiety; active proximity-seeking</td><td>Object permanence developing (~8–9m); now 'knows' caregiver exists when absent; can miss specific people</td></tr>
+              <tr><td>4</td><td><strong>Goal-Corrected Partnership</strong></td><td>24+ months</td><td>Understands caregiver's goals/plans; negotiates separations cooperatively; language replaces proximity; less distress when reasons given</td><td>Theory of mind precursors; language development; can represent others' intentions; less reliant on physical contact</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Table 4 -->
+        <div class="data-table-wrap table-content" id="table-3" style="display:none">
+          <table class="data-table">
+            <thead><tr><th>Concept</th><th>Theorist(s)</th><th>Definition</th><th>Relevance to Human Attachment</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Innate behaviour</strong></td><td>Lorenz, Tinbergen</td><td>Stereotyped, species-universal, experience-independent, stable after onset</td><td>Infant crying/smiling/clinging = innate signalling behaviours that elicit caregiving (Bowlby)</td></tr>
+              <tr><td><strong>Fixed Action Pattern</strong></td><td>Lorenz, Tinbergen</td><td>Complex, genetically programmed sequence triggered by sign stimulus; promotes survival</td><td>Infant signalling behaviours (crying, reaching) as FAP-like; adult caretaking as fixed response</td></tr>
+              <tr><td><strong>Sign stimulus</strong></td><td>Lorenz, Tinbergen</td><td>Environmental cue that automatically releases FAP; must meet specific criteria</td><td>Infant's babyish features (large head, round eyes) and signals act as sign stimuli to elicit adult caretaking</td></tr>
+              <tr><td><strong>Imprinting</strong></td><td>Lorenz (1952)</td><td>Rapid learning of attachment to first moving object seen in sensitive period; long-term social/sexual effects</td><td>Analogy for human infant attachment: biologically prepared sensitive period; not irreversible in humans</td></tr>
+              <tr><td><strong>Sensitive period</strong></td><td>Ethologists generally</td><td>Time window of heightened readiness for specific learning; biologically bounded but not fully irreversible</td><td>Early months of life = sensitive period for attachment formation; early deprivation has effects but not necessarily irreversible</td></tr>
+              <tr><td><strong>Learning predispositions</strong></td><td>Ethologists generally</td><td>Biology biases toward specific kinds of learning; enables AND constrains learning</td><td>Infants predisposed to attend to human faces, voices, learn language → facilitates early social bonding</td></tr>
+              <tr><td><strong>Evolutionary perspective</strong></td><td>Darwin, Lorenz, Bowlby</td><td>Development follows patterns acquired by the species because they enhanced survival/reproduction</td><td>Attachment behaviours evolved because proximity to caregiver protected infants from predators and elements (EEA)</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Table 5 -->
+        <div class="data-table-wrap table-content" id="table-4" style="display:none">
+          <table class="data-table">
+            <thead><tr><th>Observed in Depressed Mother-Infant Dyads</th><th>Consequence for Child</th></tr></thead>
+            <tbody>
+              <tr><td>Little mutual eye contact</td><td>Reduced emotional attunement and connection</td></tr>
+              <tr><td>Minimal mutual responsiveness</td><td>Child's signals are not adequately responded to</td></tr>
+              <tr><td>Mother and baby both tend to avert gaze</td><td>Reduced positive emotional feedback loop</td></tr>
+              <tr><td>Frightening or frightened maternal behaviour</td><td>Parent becomes both source of comfort AND fear → driver of disorganised attachment</td></tr>
+              <tr style="background:rgba(201,168,76,0.04)"><td colspan="2" style="color:var(--muted); font-style:italic;">Key statistic: 82% of maltreated infants show disorganised attachment vs 19% of non-maltreated (Carlson et al. 1989). Maternal depression is listed alongside neglect and abuse as a risk factor for disorganised attachment.</td></tr>
+              <tr style="background:rgba(76,175,125,0.04)"><td colspan="2" style="color:#92dbb6; font-style:italic;">Intervention evidence: Van den Boom (1994, Netherlands) — sensitivity training → 68% secure at 12m vs 28% in control group. Non-depressed co-caregiver (e.g. father) can partially mitigate negative effects.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- QUIZ VIEW -->
+    <div id="view-quiz" class="view">
+      <div class="view-header">
+        <button class="view-header-back" onclick="showView('home')">←</button>
+        <div class="view-header-info">
+          <div class="view-header-badge" style="color:var(--gold)">Flashcard Quiz</div>
+          <div class="view-header-title">Test Your Knowledge</div>
+        </div>
+      </div>
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <div class="quiz-meta" id="quiz-meta">Card <span id="quiz-current">1</span> of <span id="quiz-total">40</span></div>
+          <button class="quiz-btn" onclick="shuffleQuiz()">🔀 Shuffle</button>
+        </div>
+
+        <div class="quiz-filter" id="quiz-filter">
+          <button class="filter-btn active" data-branch="all" onclick="filterQuiz('all')">All 40</button>
+          <button class="filter-btn" data-branch="A" onclick="filterQuiz('A')" style="--c:var(--branch-a)">Branch A</button>
+          <button class="filter-btn" data-branch="B" onclick="filterQuiz('B')">Branch B</button>
+          <button class="filter-btn" data-branch="C" onclick="filterQuiz('C')">Branch C</button>
+          <button class="filter-btn" data-branch="D" onclick="filterQuiz('D')">Branch D</button>
+          <button class="filter-btn" data-branch="E" onclick="filterQuiz('E')">Branch E</button>
+          <button class="filter-btn" data-branch="F" onclick="filterQuiz('F')">Branch F</button>
+        </div>
+
+        <div class="quiz-progress-track" id="quiz-progress-track"></div>
+
+        <div class="flashcard" id="flashcard" onclick="flipCard()">
+          <div class="flashcard-inner" id="flashcard-inner">
+            <div class="flashcard-front" id="fc-front">
+              <div class="fc-branch" id="fc-branch-label">Branch A</div>
+              <div class="fc-num" id="fc-num">#01</div>
+              <div class="fc-question" id="fc-question">Innate / Species-Specific Behaviour</div>
+              <div class="fc-hint">Click to reveal definition & example</div>
+            </div>
+            <div class="flashcard-back" id="fc-back">
+              <div class="fc-answer-label">✦ Definition</div>
+              <div class="fc-definition" id="fc-definition">Loading...</div>
+              <div class="fc-example" id="fc-example">Loading example...</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="quiz-controls">
+          <button class="quiz-btn" onclick="prevCard()">← Previous</button>
+          <button class="quiz-btn primary" onclick="flipCard()">Flip Card</button>
+          <button class="quiz-btn" onclick="nextCard()">Next →</button>
+        </div>
+
+        <div style="margin-top:20px; background:rgba(201,168,76,0.06); border:1px solid rgba(201,168,76,0.18); border-radius:10px; padding:16px;">
+          <div style="font-size:11px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:var(--gold); margin-bottom:8px;">📝 Exam Q for this concept</div>
+          <div style="font-size:13px; color:var(--gold-light); font-style:italic; margin-bottom:8px;" id="quiz-exam-q">Loading...</div>
+          <div style="font-size:12px; color:var(--muted); border-top:1px solid rgba(201,168,76,0.15); padding-top:8px; margin-top:8px;" id="quiz-model-toggle" onclick="toggleModelA()">▸ Show Model Answer</div>
+          <div style="font-size:12.5px; color:var(--text); line-height:1.6; margin-top:8px; display:none;" id="quiz-model-a"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MISTAKES VIEW -->
+    <div id="view-mistakes" class="view">
+      <div class="view-header">
+        <button class="view-header-back" onclick="showView('home')">←</button>
+        <div class="view-header-info">
+          <div class="view-header-badge" style="color:var(--red)">⚠ Common Mistakes</div>
+          <div class="view-header-title">Avoid These Errors to Get Full Marks</div>
+        </div>
+      </div>
+      <div class="mistakes-container" id="mistakes-container"></div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+// ══════════════════════════════════════════
+// DATA
+// ══════════════════════════════════════════
+
+const BRANCHES = {
+  A: { name: 'Ethological Foundations', color: 'var(--branch-a)' },
+  B: { name: 'Theories of Attachment', color: 'var(--branch-b)' },
+  C: { name: 'Development of Attachment', color: 'var(--branch-c)' },
+  D: { name: 'Quality & Measurement', color: 'var(--branch-d)' },
+  E: { name: 'Influences on Attachment', color: 'var(--branch-e)' },
+  F: { name: 'Stability & Outcomes', color: 'var(--branch-f)' }
+};
+
+const CONCEPTS = [
+  {
+    id: 1, branch: 'A',
+    name: 'Innate / Species-Specific Behaviour',
+    definition: 'Behaviour that is stereotyped, universal within a species, independent of prior learning, and relatively unchanged after establishment.',
+    explanation: 'Ethology emphasises biological contributions to behaviour. Innate behaviours are under primary genetic control and contrast with learned behaviours which vary in form across individuals.',
+    example: 'All geese of the same species produce the same courtship song at sexual maturity, even if reared in isolation from conspecifics.',
+    examQ: 'Explain what makes a behaviour \'innate\' according to ethology. Give one human example.',
+    modelA: 'A behaviour is innate if it (1) has an unvarying form across individuals, (2) appears without relevant prior learning, (3) is universal in the species, and (4) is stable after establishment. In humans, the neonate\'s grasping reflex meets these criteria — infants grasp objects placed in the palm without ever being taught to do so.'
+  },
+  {
+    id: 2, branch: 'A',
+    name: 'Fixed Action Pattern (FAP)',
+    definition: 'A complex, genetically programmed innate behaviour sequence triggered by a specific sign stimulus, promoting survival.',
+    explanation: 'FAPs were central to classical ethology (Lorenz, Tinbergen). Now called \'modal action patterns\' because research showed they are more variable than first thought. They end in adaptive outcomes (eating, mating, protecting).',
+    example: 'Male stickleback fish performs an aggressive attack sequence whenever it sees another male\'s red belly (sign stimulus), even a crudely shaped decoy painted red will trigger the response.',
+    examQ: 'What is a fixed action pattern, and what role does the sign stimulus play?',
+    modelA: 'A FAP is a complex innate behaviour sequence elicited by a specific sign stimulus. The sign stimulus acts like a key opening a lock (Lorenz) — its presence automatically releases the behaviour. In humans, infant crying/smiling are considered FAP-like signalling behaviours that elicit caretaking.'
+  },
+  {
+    id: 3, branch: 'A',
+    name: 'Sign Stimulus / Releaser',
+    definition: 'A specific environmental stimulus whose presence automatically triggers a fixed action pattern.',
+    explanation: 'Sign stimuli must meet specific criteria (e.g. a particular call note, colour pattern, or movement type). When exaggerated beyond the natural stimulus, the response is intensified (supernormal stimulus).',
+    example: 'The red belly of a male stickleback fish is the sign stimulus for conspecific male aggression. A decoy without the red area fails to trigger the FAP; one with only a crude red patch does.',
+    examQ: 'How does the concept of a sign stimulus explain why some infant behaviours reliably elicit caretaking from adults?',
+    modelA: 'Infant signalling behaviours (smiling, crying, babbling) function as sign stimuli for adult caregiving. These signals are species-wide, reliably elicit parental attention, and are therefore considered biologically programmed releasers that bring the adult close — essential for infant survival (Bowlby).'
+  },
+  {
+    id: 4, branch: 'A',
+    name: 'Imprinting',
+    definition: 'A type of rapid, species-specific learning occurring during a sensitive period in which a young animal forms a lasting attachment to the first moving object encountered.',
+    explanation: 'Lorenz (1952) demonstrated imprinting in geese: goslings followed the first moving object seen shortly after hatching. Imprinting has long-term effects on social and sexual behaviour. Lorenz initially considered it irreversible; more recent work shows some flexibility.',
+    example: 'Lorenz famously had goslings imprint on him. They followed him, directed courtship displays at humans during the reproductive season, and showed separation distress when he was absent.',
+    examQ: 'How does imprinting inform Bowlby\'s theory of human infant attachment? What are the key differences?',
+    modelA: 'Bowlby drew on imprinting as an analogy: just as goslings have a biologically prepared sensitive period for bonding, human infants have a biological predisposition to form specific attachments. Unlike strict imprinting, human attachment is not irreversible, is not restricted to one brief episode, and is based on reciprocal behavioural systems rather than simple following.'
+  },
+  {
+    id: 5, branch: 'A',
+    name: 'Sensitive (Critical) Period',
+    definition: 'A biologically bounded time window during which an organism is especially receptive to particular environmental inputs and certain behaviours are most easily acquired.',
+    explanation: 'Sensitive periods involve learning predispositions — biology prepares the organism to learn from specific experiences at specific times. The concept was broadened from \'critical\' (irreversible) to \'sensitive\' (probabilistic) to reflect that experiences outside the period can still have effects, albeit weaker ones.',
+    example: 'Mother goats form a bond with their young in the first 5 minutes after birth. If removed immediately, the mother attacks them upon return; waiting 5 minutes before removal leads to acceptance.',
+    examQ: 'Distinguish between the terms \'critical period\' and \'sensitive period\'. Why did researchers move away from the former?',
+    modelA: 'A critical period implies irreversibility — if the experience is missed, the opportunity is gone permanently. A sensitive period implies heightened biological readiness, but some plasticity remains outside the window. Researchers moved to \'sensitive period\' because evidence showed early deprivations could be partially overcome with intensive later intervention, and that imprinting in birds was not fully irreversible.'
+  },
+  {
+    id: 6, branch: 'A',
+    name: 'Evolutionary Perspective (Ethology)',
+    definition: 'The view that development follows a pattern acquired by the species because it facilitated survival and reproduction across phylogenetic history.',
+    explanation: 'Ontogenetic change (single lifetime) must be understood against the backdrop of phylogenetic change (across generations). Modern evolutionary theory combines Darwinian natural selection with population genetics.',
+    example: 'The upright stance, opposable thumb, and infant signalling behaviours (crying, smiling, clinging) all evolved because they enhanced survival — the young must attach to caregivers to avoid predators, obtain food, and be protected.',
+    examQ: 'Why do ethologists argue that infant attachment behaviours are best understood from an evolutionary perspective?',
+    modelA: 'Infant behaviours such as crying, smiling, and clinging function as sign stimuli that bring adult caregivers into proximity. These behaviours promote survival in a vulnerable organism that cannot protect itself. Bowlby argued they are evolutionarily adaptive because they evolved in an environment of evolutionary adaptedness (EEA) where separation from caregivers was potentially fatal.'
+  },
+  {
+    id: 34, branch: 'A',
+    name: 'Naturalistic Observation (Ethological Methodology)',
+    definition: 'The systematic study of behaviour in its natural environment, emphasising ecological validity and observation of species-typical behaviours.',
+    explanation: 'Ethologists argue that species-specific behaviours cannot be discovered in artificial laboratory settings. Ainsworth first observed mother-infant pairs in Uganda and Baltimore before designing the Strange Situation. Her field observations generated the secure base concept.',
+    example: 'Ainsworth\'s home observations of mothers and infants in Baltimore (watching daily interactions) generated hypotheses about sensitive care that she then tested in the structured Strange Situation.',
+    examQ: 'How has ethological methodology influenced developmental psychology research, with specific reference to attachment?',
+    modelA: 'Ethology contributed the emphasis on observing children in natural settings (home, playground, school) before designing laboratory paradigms. This ecological validity is essential because laboratory behaviours may not represent typical functioning. In attachment research, naturalistic observation (Ainsworth\'s home visits; AQS in the home) revealed the secure base concept and caregiver sensitivity as predictors — concepts that would not have emerged from purely laboratory work.'
+  },
+  {
+    id: 35, branch: 'A',
+    name: 'Learning Predispositions (Ethology)',
+    definition: 'Biologically based biases toward certain kinds of learning — biology both enables and constrains which associations can be formed, how easily, and during which developmental windows.',
+    explanation: 'Not all associations are equally easy to learn (Garcia effect: rats learn taste-illness associations in one trial but not tone-illness; humans learn language easily in early life). General learning ability is complemented by domain-specific learning skills.',
+    example: 'Human infants are predisposed to learn language: all infants can initially discriminate all phonemes; during a sensitive period they specialise to the phonemes of their native language(s). Language acquisition could not be explained by general reinforcement alone.',
+    examQ: 'How do learning predispositions support the claim that biology and learning are not opposites?',
+    modelA: 'Biology does not make learning unnecessary — it makes certain learning inevitable and channels its direction. Biology prepares organisms to learn specific things from specific experiences at specific times (sensitive periods). The dichotomy is false; the question is always \'nature via nurture\'.'
+  },
+  {
+    id: 7, branch: 'B',
+    name: 'Attachment (Definition)',
+    definition: 'A strong, enduring emotional bond that forms in the second half of the first year between an infant and one or more regular caregivers.',
+    explanation: 'Attachment is characterised by proximity-seeking, separation protest, use of the attachment figure as a secure base, and reunion behaviour. It is a relationship (not a behaviour), reflects mutual influence, and develops gradually.',
+    example: 'A 9-month-old crawling rapidly toward her mother when a stranger enters the room; crying when the mother leaves; calming immediately upon her return.',
+    examQ: 'How does the definition of attachment differentiate it from general social responsiveness?',
+    modelA: 'Attachment is SELECTIVE — it is directed at specific individuals (not all humans). The infant shows differential behaviour: separation protest only when the attachment figure leaves, not any adult. Attachment involves an enduring bond (not merely moment-to-moment responsiveness) and motivates maintaining proximity particularly under threat.'
+  },
+  {
+    id: 8, branch: 'B',
+    name: 'Psychoanalytic Theory of Attachment (Freud)',
+    definition: 'Infants become attached to caregivers because caregivers satisfy the infant\'s innate oral drive (pleasure through sucking); the feeding person becomes associated with pleasure.',
+    explanation: 'Freud proposed that the infant\'s primary drive is oral gratification. Through classical conditioning-like association, the mother (feeding agent) becomes a source of pleasure and thus the first love object. The theory is generally unsupported empirically.',
+    example: 'Freud\'s theory predicts that bottle-fed infants should attach to whoever holds the bottle. This is not consistently supported: infants form attachments based on interaction quality, not just feeding.',
+    examQ: 'What empirical evidence most directly challenges the psychoanalytic theory of attachment?',
+    modelA: 'Harlow\'s (1959) rhesus monkey studies showed that infant monkeys preferred a cloth-covered surrogate mother over a wire surrogate that provided food. Attachment went to the soft, comforting figure, not the feeding one. Similarly, Schaffer & Emerson (1964) found babies formed strong attachments to fathers and others who played little or no role in feeding.'
+  },
+  {
+    id: 9, branch: 'B',
+    name: 'Learning Theory of Attachment',
+    definition: 'Attachment develops through classical and operant conditioning: the caregiver reduces hunger (primary reinforcer), becomes a secondary reinforcer, and attachment grows from repeated satisfying interactions.',
+    explanation: 'The caregiver provides food (primary reinforcer). Through repeated pairing, the caregiver herself becomes a secondary reinforcer — her presence produces reward-like responses. Later versions extended this to include visual, auditory, and tactile stimulation (Gewirtz, 1969).',
+    example: 'A mother who consistently responds to her baby\'s cries with feeding becomes associated with relief from discomfort; her presence reduces distress and her absence triggers protest.',
+    examQ: 'Describe one major study that challenges the learning theory account of attachment formation.',
+    modelA: 'Schaffer & Emerson (1964): babies whose mothers were relatively unresponsive and distant but whose fathers were attentive and stimulating tended to form strong paternal attachments — despite spending more time with their mothers. This suggests that responsiveness and stimulation quality, not feeding, drive attachment formation.'
+  },
+  {
+    id: 10, branch: 'B',
+    name: 'Ethological Theory of Attachment (Bowlby)',
+    definition: 'Attachment has evolutionary roots in a set of instinctual infant signals (crying, smiling, clinging, following) that elicit parental care and promote survival; both infant and parent are biologically pre-programmed to respond.',
+    explanation: 'Bowlby synthesised ethology, control systems theory, and psychoanalysis. He proposed an attachment behavioural system: a self-regulating system in which proximity to the caregiver is the set-goal. Both the infant\'s behaviour and parental caregiving are innate systems that became synchronised.',
+    example: 'A toddler uses mum as a secure base — exploring confidently when she is present, but running back when frightened, and seeking physical contact to \'refuel\' emotionally before venturing out again.',
+    examQ: 'Outline Bowlby\'s ethological theory and explain why it is considered a more complete account than learning theory.',
+    modelA: 'Bowlby proposed that infant attachment behaviours (crying, smiling, clinging) are biologically programmed signals that evolved to keep infants close to protective caregivers. Unlike learning theory, which requires feeding/rewards to build attachment, Bowlby emphasised that BOTH infant and caregiver are biologically prepared. He also incorporated cognitive elements (IWMs) and explained why attachment is a mutual, bidirectional relationship.'
+  },
+  {
+    id: 11, branch: 'B',
+    name: 'Cognitive-Developmental Approach to Attachment',
+    definition: 'Specific attachments require the infant to have developed object permanence — the understanding that people continue to exist when not in view.',
+    explanation: 'Piaget\'s concept of object permanence is a prerequisite: the infant cannot miss someone she does not know still exists. As cognitive development advances, physical proximity becomes less necessary and verbal/non-verbal communication can substitute.',
+    example: 'Before ~8 months, infants do not show separation protest because they lack object permanence — out of sight is truly \'out of mind\'. After object permanence develops, separation from the caregiver produces visible distress.',
+    examQ: 'How does the cognitive-developmental approach explain the timing of the onset of clear-cut attachment?',
+    modelA: 'Clear-cut attachment emerges at ~7 months, coinciding with the development of object permanence. Before this stage the infant lacks the cognitive prerequisite to \'miss\' someone (cannot represent their continued existence). Object permanence allows the infant to register absence and anticipate reunion, enabling the separation protest that marks true attachment.'
+  },
+  {
+    id: 12, branch: 'B',
+    name: 'Internal Working Models (IWMs)',
+    definition: 'Mental representations of the self, the caregiver, and the attachment relationship, built from early interactions and used to predict and guide future social behaviour.',
+    explanation: 'Bowlby (1973) proposed that IWMs are templates derived from early caregiving experiences. They are sometimes called attachment representations. They are not simply copies of experience but reconstructions. IWMs are transmitted intergenerationally.',
+    example: 'A child whose mother was consistently responsive develops an IWM of herself as lovable and of others as trustworthy — predicting warm, secure romantic relationships in adulthood.',
+    examQ: 'What are Internal Working Models and why are they important for understanding intergenerational continuity in attachment?',
+    modelA: 'IWMs are cognitive-affective schemas about the self (am I worthy of care?) and caregivers (will others be available?). They guide interpretation of social situations and motivate behaviour. They are transmitted intergenerationally because parental IWMs (assessed via the AAI) predict the quality of the parent-infant relationship (Main et al. 1985): autonomous parents → secure infants; dismissing parents → avoidant infants; preoccupied parents → resistant infants.'
+  },
+  {
+    id: 38, branch: 'B',
+    name: 'Harlow\'s Surrogate Mother Studies',
+    definition: 'Rhesus monkeys raised with wire and cloth surrogate mothers demonstrated that attachment is based on contact comfort, not feeding — directly disproving the learning theory prediction.',
+    explanation: 'Harlow & Zimmerman (1959): infant monkeys could feed from the wire mother but consistently preferred the cloth mother, especially under stress. It established that contact comfort (warmth, texture) is more powerful than food as a basis for attachment.',
+    example: 'Under the stress of a frightening wind-up toy monster, the infant monkeys ran to the cloth mother, clinging and pressing their faces into her body — even though she dispensed no food.',
+    examQ: 'Describe Harlow\'s study design and explain why its results were critical for disproving learning theory and supporting ethological accounts.',
+    modelA: 'Design: infant rhesus monkeys raised from birth with (1) soft terrycloth with no feeding bottle; (2) wire frame with feeding bottle. Learning theory predicts preference for wire mother (food = primary reinforcer). Results: ALL infant monkeys sought the cloth mother under stress regardless of who fed them. Conclusion: contact comfort, not food, is the basis of infant attachment. This supports Bowlby\'s ethological argument that proximity and warmth are the evolutionarily significant bases for the infant-caregiver bond.'
+  },
+  {
+    id: 39, branch: 'B',
+    name: 'Schaffer & Emerson (1964)',
+    definition: 'A landmark naturalistic study showing that infants form attachments based on quality of interaction (responsiveness, stimulation) rather than time spent together or feeding role.',
+    explanation: 'Monthly home observations + maternal reports of 60 Glasgow infants from birth to 18 months. Found: (1) infants formed attachments to fathers who played little or no role in feeding; (2) babies with unresponsive mothers but attentive fathers were more attached to fathers; (3) by 18 months, most infants had multiple attachment figures.',
+    example: 'Babies whose mothers were \'relatively unresponsive and distant\' but whose fathers \'were attentive and stimulating\' tended to form strong paternal attachments even though they spent more time with their mothers.',
+    examQ: 'What were the key findings of Schaffer & Emerson (1964) and why are they theoretically important?',
+    modelA: 'Key findings: (1) Attachment forms with the most RESPONSIVE/STIMULATING adult, not necessarily the primary caregiver or feeder. (2) Multiple attachments form by 18 months. (3) Feeding is not the critical variable. This directly disconfirms psychoanalytic and classical learning theories, and supports Bowlby\'s emphasis on responsive interaction.'
+  },
+  {
+    id: 13, branch: 'C',
+    name: 'Schaffer\'s 4 Phases of Attachment',
+    definition: 'Schaffer (1996) proposed that attachment develops across four sequential phases: Preattachment (0-2m), Attachment-in-the-making (2-7m), Clear-cut attachment (7-24m), and Goal-corrected partnership (24m+).',
+    explanation: 'Phase 1: Indiscriminate social responsiveness. Phase 2: Recognition of familiar people but no protest at separation. Phase 3: Specific attachment forms; separation protest appears. Phase 4: Child becomes a partner in negotiating separations (goal-corrected), thanks to cognitive advances.',
+    example: 'At 3 months (Phase 2), a baby smiles at both parent and stranger. At 9 months (Phase 3), the baby protests when mum leaves but not when dad\'s colleague leaves.',
+    examQ: 'Describe Schaffer\'s four phases of attachment development, linking each to the cognitive and behavioural capacities of the infant.',
+    modelA: 'Phase 1 (0-2m): Social behaviours are indiscriminate; all humans elicit similar responses. Phase 2 (2-7m): Infant recognises familiar faces/smells/voices but does NOT yet protest separation. Phase 3 (7-24m): Specific attachments form — infant actively seeks contact with particular caregivers and protests their departure. Requires object permanence. Phase 4 (24m+): Goal-corrected partnership — child understands parents\' goals and feelings; negotiates separations cooperatively.'
+  },
+  {
+    id: 14, branch: 'C',
+    name: 'Multiple Attachments',
+    definition: 'Infants form attachment bonds not only with their primary caregiver but also with fathers, siblings, peers, and other regular interaction partners.',
+    explanation: 'The focus on mother-infant dyads is historically and culturally biased. According to anthropological data, mothers are exclusive caregivers in only ~3% of human societies. Infants readily attach to any consistently available, responsive adult.',
+    example: 'In a non-stressful home situation with both parents present, babies show equal proximity-seeking to mothers and fathers (Lamb, 2004). Under stress, they preferentially seek the mother — but only because she has more often served the security role, not because of biological primacy.',
+    examQ: 'Critically evaluate the assumption that mother-infant attachment is uniquely important compared with other attachment relationships.',
+    modelA: 'Multiple attachment figures are the norm across cultures. Infants develop hierarchically organised networks of attachment relationships (Bretherton). Any responsive caregiver can become an attachment figure. The belief in maternal primacy is partly a product of Western cultural norms. Cross-cultural evidence shows enormous variability (Aka fathers in Central African Republic). However, under conditions of stress, the most familiar caregiver is sought — this is often the mother in Western samples.'
+  },
+  {
+    id: 15, branch: 'C',
+    name: 'Father-Infant Attachment',
+    definition: 'Infants form genuine attachments to their fathers, but the quality and style of paternal interaction typically differs from maternal interaction.',
+    explanation: 'Fathers serve a distinct developmental role as \'playmate\': more physically arousing, unpredictable, rough-and-tumble play (especially with sons). Mothers tend toward quieter, verbal, peek-a-boo style games. This difference persists even when fathers are the primary caregiver.',
+    example: 'Even in households where the father is the primary caregiver, he tends to engage in physically arousing play rather than the verbally stimulating style typical of mothers (Field, 1978).',
+    examQ: 'What do studies of father-infant interaction reveal about the nature of paternal attachment and its developmental significance?',
+    modelA: 'Research (Lamb, 2004) shows infants are equally attached to both parents in non-stressful situations but preferentially seek the mother under stress. Fathers provide a complementary developmental function as exciting playmates, stimulating exploration and physical confidence. Cultural variation is substantial: Aka fathers in Central Africa provide more direct physical care than fathers in any other studied society.'
+  },
+  {
+    id: 36, branch: 'C',
+    name: 'Separation Protest',
+    definition: 'The behavioural expression of distress (crying, reaching, clinging) shown by infants when separated from an attachment figure — a diagnostic indicator that a specific attachment has been formed.',
+    explanation: 'Separation protest marks the transition from Phase 2 to Phase 3 in Schaffer\'s model. Its onset (~7-9 months) coincides with object permanence development. It is selective: the infant protests the departure of SPECIFIC attachment figures, not all adults. Cross-culturally, separation protest appears at similar ages, suggesting a biological timetable.',
+    example: 'At 8 months, a baby in a Ganda village (Uganda) screams when her mother hands her to another woman and leaves, but did not do this two months earlier when she was in Phase 2.',
+    examQ: 'Why is separation protest considered a reliable indicator that true attachment has formed?',
+    modelA: 'Separation protest is selective (directed only at attachment figures), reflects object permanence (the infant knows the caregiver still exists), activates the attachment system (proximity-seeking behaviour), and motivates reunion. Before Phase 3, the infant lacks the cognitive and motivational machinery to \'miss\' someone. The emergence of protest signals that the infant now has a specific attachment bond with a particular person — not merely a preference for familiar stimuli.'
+  },
+  {
+    id: 37, branch: 'C',
+    name: 'Goal-Corrected Partnership (Phase 4)',
+    definition: 'The fourth phase of Bowlby\'s/Schaffer\'s attachment development, beginning at ~24 months, in which children understand that their caregivers have their own goals and plans, and negotiate separations cooperatively.',
+    explanation: 'In Phase 3, children can only signal distress at separation. In Phase 4, cognitive advances (theory of mind precursors) allow children to understand parental plans and communicate about them. Parents can \'negotiate\' separations by explaining reasons.',
+    example: 'Weinraub & Lewis (1977): 2-year-olds handled their mothers\' departures much better when the mother said \'I\'m going out now for just a minute, but I\'ll be right back\' than when she left without explanation.',
+    examQ: 'How does Phase 4 of attachment development demonstrate the integration of cognitive and socioemotional development?',
+    modelA: 'Goal-corrected partnership requires theory of mind precursors (understanding that others have goals, intentions, and reasons for their actions), language comprehension (to understand the explanation of absence), and affect regulation (capacity to tolerate separation with verbal reassurance rather than physical proximity). This illustrates Bowlby\'s original argument that attachment is fundamentally cognitive and communicative as well as behavioural.'
+  },
+  {
+    id: 16, branch: 'D',
+    name: 'Secure Base',
+    definition: 'The function of an attachment figure as a safe haven from which an infant can explore and to which the infant returns for comfort under threat.',
+    explanation: 'Ainsworth (1963) introduced the secure base concept: attached children use the caregiver as an emotional refuelling station. Secure base behaviour is the hallmark of a healthy attachment relationship. In adolescence, the secure base shifts from physical proximity to psychological availability.',
+    example: 'A 12-month-old in an unfamiliar playroom with toys: she ventures away from mum to explore, periodically returning to touch her leg (\'checking in\'), then setting off again. When a stranger enters, she returns to mum before resuming play.',
+    examQ: 'Explain the \'secure base\' concept and its implications for cognitive and social development.',
+    modelA: 'The secure base is the attachment figure\'s role as a safe haven that enables exploration. Ainsworth showed that securely attached infants explore more and learn more in novel environments. Longitudinally, secure attachment predicts intellectual curiosity at age 2, better problem solving, higher academic attainment, and more effective peer relationships.'
+  },
+  {
+    id: 17, branch: 'D',
+    name: 'Strange Situation (Ainsworth)',
+    definition: 'A standardised laboratory assessment procedure involving 8 episodes of separation and reunion with the mother and a stranger, used to classify infant attachment quality.',
+    explanation: 'Developed by Ainsworth (1973), the Strange Situation lasts ~22 minutes. It uses escalating stress (separation from caregiver, presence of stranger) to activate the attachment system. The critical behaviour is the infant\'s reaction to REUNION with the mother — this reveals the IWM and the regulatory strategy.',
+    example: 'Episode 5 (first reunion): a securely attached infant immediately seeks contact with mum, is quickly comforted, and returns to play. An avoidant infant turns away. A resistant infant clings and angrily pushes away.',
+    examQ: 'Describe the Strange Situation procedure and explain why reunion behaviour is the most informative episode.',
+    modelA: 'The Strange Situation involves: observer introduces mother & baby to room → mother is non-participant → stranger enters → mother leaves (first separation) → stranger tries to comfort → mother returns (first reunion) → mother and baby alone → mother leaves again → stranger returns → mother returns (second reunion). Reunion behaviour is most informative because it reveals the infant\'s regulatory strategy: secure children seek comfort and are quickly reassured; avoidant children suppress attachment needs; resistant children are ambivalent; disorganised children show no coherent strategy.'
+  },
+  {
+    id: 18, branch: 'D',
+    name: 'Secure Attachment',
+    definition: 'An attachment pattern in which the infant uses the caregiver as a secure base, actively seeks contact after separation, is quickly comforted, and returns to exploration.',
+    explanation: 'Ainsworth found ~60-65% of white, middle-class American infants were classified as securely attached. These babies balance proximity-seeking and exploration effectively. The underlying IWM: \'I am lovable; others are responsive\'.',
+    example: 'On reunion in the Strange Situation, the secure infant crawls quickly toward mum, reaches to be picked up, settles within seconds, and returns to toy exploration while maintaining eye contact.',
+    examQ: 'Why is secure attachment associated with more positive developmental outcomes? Give at least two examples.',
+    modelA: 'Securely attached children develop positive IWMs that predict others as available and the self as worthy of care. This facilitates: (1) greater exploratory behaviour and intellectual curiosity (Main, 1973); (2) better emotion regulation and social competence with peers (Contreras et al. 2000); (3) more positive and accurate memory for emotional events (Belsky et al. 1996); (4) higher academic attainment (Jacobsen & Hofmann, 1997).'
+  },
+  {
+    id: 19, branch: 'D',
+    name: 'Insecure-Avoidant Attachment',
+    definition: 'An insecure attachment pattern in which the infant shows little distress during separation, actively avoids and ignores the caregiver on reunion, and appears self-sufficient.',
+    explanation: '~20% of American samples. These infants appear not to need the caregiver — but their cortisol levels rise during separation showing they ARE physiologically stressed. The avoidance is a behavioural strategy: the infant has learned that expressing attachment needs will be rejected, so suppresses overt distress.',
+    example: 'In the Strange Situation, the avoidant infant continues playing when mum leaves, looks away when she returns, moves toward toys rather than toward her, and does not resist her comforting attempts — but also does not actively seek them.',
+    examQ: 'What parenting behaviour is associated with insecure-avoidant attachment, and how does the avoidant strategy serve the infant?',
+    modelA: 'Avoidant attachment develops when the caregiver is consistently unavailable, rejecting, or unresponsive to attachment signals (Cassidy & Berlin, 1994). The infant learns to deactivate the attachment system to maintain closeness without risking the caregiver\'s withdrawal. Paradoxically, by not showing need, the infant keeps the caregiver from leaving — it is an adaptive (if costly) strategy given the caregiver\'s disposition.'
+  },
+  {
+    id: 20, branch: 'D',
+    name: 'Insecure-Resistant Attachment',
+    definition: 'An insecure attachment pattern in which the infant is highly distressed during separation, seeks contact but cannot be comforted on reunion, and shows angry resistance to the caregiver.',
+    explanation: '~10-15% of American samples. These infants show hyperactivation of the attachment system. They are ambivalent: wanting closeness but angry at the inconsistently available caregiver. The underlying IWM: \'I don\'t know whether I can depend on others\'.',
+    example: 'On reunion in the Strange Situation, the resistant infant clings to mum, then angrily pushes her away (\'contact resisting\'), cannot return to play, remains preoccupied with mum throughout.',
+    examQ: 'Distinguish insecure-avoidant from insecure-resistant attachment in terms of (a) Strange Situation behaviour and (b) associated parenting style.',
+    modelA: '(a) Avoidant infants ignore/avoid caregiver on reunion; resistant infants seek closeness but angrily reject comfort. (b) Avoidant: caregiver is consistently rejecting and unavailable; resistant: caregiver is inconsistently available — responds warmly sometimes, ignores other times. Both reflect insecure IWMs but represent opposite regulatory strategies: deactivation (avoidant) vs hyperactivation (resistant) of the attachment system.'
+  },
+  {
+    id: 21, branch: 'D',
+    name: 'Insecure-Disorganised Attachment',
+    definition: 'An insecure attachment pattern characterised by lack of any coherent behavioural strategy for dealing with separation stress; children appear confused, disoriented, or contradictory.',
+    explanation: 'Identified by Main & Hesse (1990); ~15-20% of general samples, but much higher (up to 80%) in maltreated samples (Carlson et al. 1989). Associated with frightened or frightening parenting, abuse, or neglect. Strongly predictive of later psychopathology.',
+    example: 'In the Strange Situation, a disorganised infant approaches mum with head averted, then suddenly freezes mid-movement, seems to \'stare into space\', starts crying, then approaches with arms raised but suddenly collapses to the floor.',
+    examQ: 'Why is insecure-disorganised attachment considered the most clinically significant classification, and what factors are associated with its development?',
+    modelA: 'Disorganised attachment is strongly associated with child maltreatment (82% in maltreated vs 19% in non-maltreated samples; Carlson et al. 1989), maternal depression, institutional rearing, and frightening parental behaviour. It predicts the poorest long-term outcomes including higher rates of conduct problems, psychopathology, and difficulties with peer relationships. Unlike avoidant and resistant strategies (which are organised strategies), disorganised attachment reflects a complete breakdown of the regulatory system.'
+  },
+  {
+    id: 22, branch: 'D',
+    name: 'Attachment Q Sort (AQS)',
+    definition: 'A naturalistic attachment assessment method in which the caregiver sorts 90 descriptive cards about the child\'s behaviour into sets ranging from \'most like\' to \'least like\' the child.',
+    explanation: 'Developed by Waters (1995). Useful for children 1-5 years; assesses secure-base behaviour, exploration balance, and affective responsiveness in HOME settings rather than laboratory. Can be used across cultures because it does not rely on separation stress.',
+    example: 'A researcher asks the mother to sort cards (\'quickly greets mother with a big smile\'; \'rarely asks for help\') into piles from most to least descriptive of her child\'s typical behaviour at home.',
+    examQ: 'Compare the AQS with the Strange Situation as methods for assessing attachment quality. What are the advantages of each?',
+    modelA: 'Strange Situation: standardised, replicable, allows precise classification across 4 types; validated against physiological measures; suitable from 8-9 months. Limitations: laboratory-based (artificial), requires separation stress, primarily validated on Western middle-class samples. AQS: ecologically valid, naturalistic home setting, broader age range (1-5), avoids separation stress, may be more appropriate cross-culturally. Limitation: relies on caregiver report (potential bias), less precise classification.'
+  },
+  {
+    id: 23, branch: 'D',
+    name: 'Cross-Cultural Validity of the Strange Situation',
+    definition: 'The extent to which Ainsworth\'s Strange Situation and attachment classifications apply meaningfully across different cultural contexts.',
+    explanation: 'Cross-cultural studies show that while all four attachment types appear in all cultures studied, their relative proportions differ significantly. German and Swedish infants show more avoidant; Japanese and Israeli kibbutz infants show more resistant. These differences reflect cultural caregiving norms, not necessarily different prevalence of security.',
+    example: 'Japanese infants, accustomed to sleeping with parents and constant contact, show much more distress at brief separations than American infants — not because they are less securely attached, but because the Strange Situation is far more stressful for them.',
+    examQ: 'Evaluate the cross-cultural applicability of the Strange Situation procedure with reference to at least two cultures.',
+    modelA: 'The Strange Situation may not be culturally neutral. (1) Japan: babies co-sleep with parents; brief separation is extremely unusual → inflated resistant classification. (2) Germany: independence training from early on → more avoidant-classified babies who may actually be well-adjusted. (3) Israeli kibbutz: night-time care by a metapelet → inflated resistant. Posada et al. (1995) found cross-cultural consistency in AQS, but notable diversity. The AQS may be more cross-culturally valid than the Strange Situation.'
+  },
+  {
+    id: 33, branch: 'D',
+    name: 'Approach/Avoidance in Disorganised Attachment',
+    definition: 'The tendency, seen in disorganised infants when reunited with abusive/neglecting caregivers, to simultaneously approach the caregiver (attachment need) and retreat (fear response) — reflecting the unresolvable conflict of having a caregiver who is both a source of comfort and fear.',
+    explanation: 'Solomon & George (1999): infants with disorganised attachment have parents who are simultaneously a source of comfort AND a source of fear. The standard response to danger is to seek the attachment figure — but the attachment figure IS the danger. This impossible conflict collapses the infant\'s attachment strategy into disorganisation.',
+    example: 'Disorganised infant approaches the returning mother with arms outstretched but head averted, then freezes mid-step, collapses briefly, and moves backward as if pulled in two directions simultaneously.',
+    examQ: 'Why does disorganised attachment develop specifically in the context of maltreatment or frightening parental behaviour?',
+    modelA: 'In normal attachment, the caregiver is the solution to stress: when frightened, the infant seeks the caregiver. In maltreatment or frightening parenting, the caregiver is BOTH the source of and solution to fear — activating both approach (attachment) and avoidance (fear) simultaneously. No coherent strategy can resolve this conflict. This explains why disorganised attachment is overrepresented in maltreated (82%) compared to non-maltreated (19%) samples.'
+  },
+  {
+    id: 24, branch: 'E',
+    name: 'Sensitive/Responsive Caregiving',
+    definition: 'A parenting style in which the caregiver is consistently available, reads infant signals accurately, and responds promptly and appropriately — the most consistent predictor of secure attachment.',
+    explanation: 'Ainsworth first described sensitive care. It involves permitting the infant to play an active role in feeding pacing; consistent availability; not ignoring genuine signals. Research has replicated the link between sensitive care and secure attachment across Australia, Brazil, South Africa.',
+    example: 'Van den Boom (1994, Netherlands): mothers of irritable newborns taught to be more sensitive → 68% of infants were securely attached at 12 months vs 28% in untrained control group.',
+    examQ: 'What does research tell us about the causal role of sensitive caregiving in determining attachment security?',
+    modelA: 'There is strong correlational and quasi-experimental evidence. Observationally, sensitive mothers consistently have securely attached infants. Experimentally, van den Boom (1994) randomly assigned mothers to sensitivity training vs control: the intervention group produced dramatically higher rates of secure attachment. This suggests a causal relationship. However, temperament cannot be ignored: irritable infants are harder to respond to sensitively, and social support buffers this.'
+  },
+  {
+    id: 25, branch: 'E',
+    name: 'Infant Temperament and Attachment',
+    definition: 'Innate individual differences in emotional reactivity and self-regulation that may influence, but do not determine, the quality of the attachment relationship.',
+    explanation: 'Some researchers proposed that \'difficult\' or irritable infants cause insecure attachment. However, the evidence is mixed (Vaughn & Bost, 1999). Temperament may affect HOW attachment is expressed but the QUALITY (secure vs insecure) is primarily determined by caregiver sensitivity.',
+    example: 'Spangler & Grossman (1993) found that irritable newborns were somewhat more likely to develop insecure attachments — but Crockenberg (1981) showed this effect disappeared when the mother received adequate social support.',
+    examQ: 'Critically evaluate the role of infant temperament in determining attachment security.',
+    modelA: 'Temperament effects on attachment are modest and mediated by social context. While difficult temperament may increase the risk of insecure attachment, this is NOT because temperament directly determines attachment quality. Rather, difficult infants are harder to respond to sensitively, and mothers with poor social support or high stress may fail to be consistently responsive. When social support is adequate, even irritable infants develop secure attachments. Caregiver sensitivity is the proximal determinant; temperament is a distal and context-dependent risk factor.'
+  },
+  {
+    id: 26, branch: 'E',
+    name: 'Intergenerational Transmission of Attachment',
+    definition: 'The process by which parents\' own attachment histories, as encoded in their IWMs, influence the attachment relationships they form with their own children.',
+    explanation: 'Main et al. (1985) developed the Adult Attachment Interview (AAI). Three classifications: Autonomous (organised, balanced recall), Dismissing (devalues attachment, poor recall), Preoccupied (confused, conflict-ridden recall). These predict infant attachment classifications. Cassidy et al. (2017) extended this to three generations: female lineage transmission strongest.',
+    example: 'Preoccupied mothers — still entangled in conflict-ridden childhood memories — tend to raise insecure-resistant infants. Dismissing mothers tend to raise avoidant infants. Autonomous mothers tend to raise securely attached infants.',
+    examQ: 'What is meant by intergenerational transmission of attachment, and what is the evidence for it?',
+    modelA: 'Bowlby proposed that IWMs formed in childhood become templates unconsciously replicated in later caregiving. Main et al. (1985) demonstrated this using the AAI: maternal attachment classification (autonomous/dismissing/preoccupied) predicted infant classification (secure/avoidant/resistant). Grossmann et al. (2005) replicated this in Germany. Cassidy et al. (2017) showed the pattern extends across three generations and is especially strong along the female lineage.'
+  },
+  {
+    id: 27, branch: 'E',
+    name: 'Earned Secure Attachment',
+    definition: 'The phenomenon in which individuals who had insecure attachment histories in childhood develop secure internal working models through positive subsequent relationships.',
+    explanation: 'Some individuals (\'earned secure\') can overcome adversity and develop secure relationships with romantic partners, therapists, or supportive others. Roisman et al. (2002) showed earned-secure young adults had romantic relationship quality comparable to continuously secure individuals. This demonstrates plasticity in IWMs.',
+    example: 'A person raised by emotionally unavailable parents develops a secure IWM through a long-term therapeutic relationship and a warm romantic partnership in adulthood — and raises a securely attached child.',
+    examQ: 'What is \'earned security\' and why is it theoretically important?',
+    modelA: 'Earned security challenges the deterministic reading of attachment theory. It demonstrates that IWMs are not fixed by early experience but are dynamic representations that can be updated. Evidence: Roisman et al. (2002) 23-year longitudinal study; individuals with insecure childhood histories who developed secure IWMs had relationship quality comparable to those continuously secure. This is important clinically (intervention can work) and theoretically (IWMs are reconstructions, not recordings).'
+  },
+  {
+    id: 28, branch: 'E',
+    name: 'Adult Attachment Interview (AAI)',
+    definition: 'A semi-structured clinical interview that assesses adults\' IWMs of their own childhood attachment relationships; predicts the quality of attachment with their own infants.',
+    explanation: 'Developed by Main & Goldwyn (1985/1991). Classified into: Autonomous (F), Dismissing (Ds), Preoccupied (E), and Unresolved (U). High predictive validity (van IJzendoorn, 1995). The prediction is based on narrative coherence and integration, not childhood content.',
+    example: 'Dismissing: \'My childhood was fine. I can\'t really remember specific incidents. My parents were just normal.\' → Their infants are typically avoidant in the Strange Situation.',
+    examQ: 'How does the AAI predict infant attachment classification, and what does this tell us about IWMs?',
+    modelA: 'The AAI predicts infant attachment because it assesses the coherence and integration of the parent\'s attachment representations. Autonomous adults (can reflect openly on both positive and negative memories) produce securely attached infants. Dismissing adults (deny or minimise attachment experiences) produce avoidant infants. Preoccupied adults (still enmeshed in childhood conflicts) produce resistant infants. The prediction is not about the content of childhood memories but how they are processed and organised — supporting the IWM framework.'
+  },
+  {
+    id: 29, branch: 'F',
+    name: 'Stability of Attachment',
+    definition: 'The degree to which an infant\'s attachment classification measured at one point in time predicts attachment quality measured at a later point.',
+    explanation: 'Research shows high stability under stable life conditions. Waters et al. (2000): 72% of the sample classified secure vs insecure in infancy were similarly classified 20 years later. Attachment can and does change when life circumstances change significantly.',
+    example: 'A child classified as secure at 12 months whose parents divorce, with accompanying financial hardship and reduced parental availability, may be classified as insecure at age 6.',
+    examQ: 'Under what conditions is attachment classification likely to remain stable, and when is it likely to change?',
+    modelA: 'Stability is highest when family circumstances are stable (Waters et al. 2000: 78% stable over 20 years; Wartner et al. 1994: first-year classification predicts 78% of sixth-year classifications). Change occurs when circumstances alter significantly: 44% of infants experiencing major negative life events changed classification (Waters et al. 2000) vs 22% without such events. Professional sensitivity training can shift insecure to secure. Thus attachment reflects the ongoing quality of the parent-child relationship, not an irreversible trait.'
+  },
+  {
+    id: 30, branch: 'F',
+    name: 'Cognitive Outcomes of Attachment Security',
+    definition: 'Securely attached infants show better problem-solving, intellectual curiosity, and academic attainment compared to insecurely attached peers.',
+    explanation: 'Secure attachment provides a foundation for exploration (via the secure base). Main (1973): securely attached children show more complex exploratory behaviour at age 2. Jacobsen & Hofmann (1997): children securely attached at age 7 were more attentive in class at 9, 12, and 15 — and earned higher grades.',
+    example: 'A securely attached 2-year-old, when presented with a difficult puzzle beyond her abilities, tries multiple strategies, seeks help from mum, and persists — whereas her insecurely attached peer quickly gives up or becomes distressed.',
+    examQ: 'Explain how secure attachment promotes cognitive development through the mechanism of the secure base.',
+    modelA: 'The secure base provides the emotional conditions for exploration. Securely attached children feel safe to venture into unfamiliar cognitive territory because they trust that support is available if needed. This leads to greater intellectual curiosity, persistence on challenging tasks, and willingness to seek adult guidance. Additionally, secure children develop more positive IWMs that include the expectation that others are helpful and cooperative — facilitating learning in academic settings.'
+  },
+  {
+    id: 31, branch: 'F',
+    name: 'Social and Emotional Outcomes of Attachment',
+    definition: 'Securely attached children develop superior peer relationships, greater empathy, better emotion regulation, and more positive social behaviour throughout childhood and adolescence.',
+    explanation: 'Carlson, Sroufe & Egeland (2004): at 4-5 years, teachers rated securely attached children as having more positive emotions, more empathy, more ability to sustain interactions. At age 19, they were more likely to have close family relationships, long-term friendships, and sustained romantic involvement (Sroufe et al. 2005).',
+    example: 'In a playground study, securely attached 4-year-olds were more likely to share toys, invite other children to join play, and respond constructively to conflicts; insecurely attached peers were more likely to be aggressive or withdrawn.',
+    examQ: 'Through what mechanisms does early attachment security produce better social outcomes?',
+    modelA: 'Two main mechanisms: (1) IWMs — secure IWMs predict others as empathic and cooperative, leading children to approach social situations with positive expectations and constructive conflict-resolution strategies (Sroufe 2005). (2) Emotion regulation — securely attached children are better at understanding their own emotions (Laible & Thompson, 1998) and regulating them (Contreras et al. 2000), which directly facilitates social interaction. Both mechanisms are bi-directional.'
+  },
+  {
+    id: 32, branch: 'F',
+    name: 'Child Care and Attachment',
+    definition: 'The effects of non-parental child care arrangements on the quality of infant-parent attachment.',
+    explanation: 'Evidence does NOT support the view that child care per se causes insecure attachment. Clarke-Stewart & Allhusen (2002): no evidence that child care prevents parent-infant attachment. Quality of care matters more than quantity. Belsky (1988): full-time care before 1 year is associated with slightly elevated insecure attachment risk.',
+    example: 'An infant who is in full-time child care from 3 months but whose parents are warm and responsive in the evenings and weekends — and whose caregiver at the nursery is stable and sensitive — typically develops secure attachment to both parents AND caregiver.',
+    examQ: 'What conclusions can be drawn from the research on early child care and attachment security?',
+    modelA: 'The research supports nuanced conclusions: (1) Child care does NOT prevent parent-infant attachment from forming. (2) Quality of care (caregiver sensitivity, stability of staff) matters more than type or quantity. (3) Full-time care beginning before age 1 is a risk factor (not a certainty) for insecure attachment. (4) Good-quality day care can compensate for lower-quality parental care (Howes, 1999). (5) Child characteristics, maternal sensitivity, and family stress all interact with child-care effects (NICHD study).'
+  },
+  {
+    id: 40, branch: 'F',
+    name: 'Kibbutz Research on Attachment (Sagi et al. 1994)',
+    definition: 'A study of Israeli infants raised in communal kibbutz settings demonstrating that sleeping arrangements (home vs communal care centre) predict attachment security.',
+    explanation: 'Sagi et al. (1994) compared kibbutz infants who slept at home with those who slept in communal infant-care centres. Home sleepers: 60% secure, 30% insecure-resistant, 8% disorganised, 0% avoidant. Communal sleepers: 26% secure, 30% resistant, 44% disorganised, 0% avoidant.',
+    example: 'A kibbutz infant who sleeps at the community care centre receives night care from a staff member responsible for multiple babies simultaneously — reducing individual sensitivity and increasing disorganised attachment rates.',
+    examQ: 'What does the kibbutz research tell us about the conditions necessary for secure attachment?',
+    modelA: 'The kibbutz data demonstrate: (1) Extended nighttime separation from parents reduces the opportunity for maternal sensitivity to develop; (2) No insecure-avoidant infants appeared in kibbutzim because kibbutz caregivers rarely exhibit the rejecting behaviour associated with avoidance; (3) The disorganised classification was elevated in communal-sleeping arrangements, suggesting inconsistent or unresponsive institutional care is a risk factor. Together with van den Boom (1994), this supports the conclusion that maternal sensitivity — which requires sufficient time and attention — is causally important for attachment security.'
+  }
+];
+
+const MISTAKES = [
+  {
+    title: 'Confusing Attachment Type with Child Personality',
+    why: 'Students often write \'avoidant children are cold\' or \'resistant children are anxious personalities\' — treating attachment classification as a stable trait of the child.',
+    correct: 'Attachment classifications describe the RELATIONSHIP between child and caregiver, not a fixed personality trait. The same child can be securely attached to one parent and insecurely attached to another (Main & Weston, 1981). Classifications reflect the dyad\'s interactive history, not the child\'s temperament.'
+  },
+  {
+    title: 'Claiming Mothers Are Biologically More Important Than Fathers',
+    why: 'The emphasis on mother-infant research leads students to argue that mothers are evolutionarily or biologically \'the\' primary attachment figure.',
+    correct: 'Mothers are NOT uniquely necessary. Anthropological data show mothers are exclusive caregivers in only ~3% of human societies. Infants attach to the most consistently responsive adult. Fathers become primary attachment figures when they are the most available and responsive caregiver.'
+  },
+  {
+    title: 'Treating Feeding as the Basis of Attachment (Learning Theory Error)',
+    why: 'Because learning theory is taught early, students default to \'the mother feeds the baby, so the baby becomes attached to her\' as their explanatory framework.',
+    correct: 'Both Harlow\'s monkey studies AND Schaffer & Emerson (1964) directly refute this. Attachment forms with the most RESPONSIVE and STIMULATING caregiver, not the food provider. The critical variable is quality of interaction (contingent responsiveness, warmth, stimulation), not feeding. Always cite both studies when evaluating learning theory.'
+  },
+  {
+    title: 'Conflating \'Insecure\' with \'Damaged\' or \'Pathological\'',
+    why: 'Students describe insecure attachment as though it inevitably leads to psychological disorder or permanently impairs development.',
+    correct: 'Insecure-avoidant and insecure-resistant attachment are ORGANISED strategies — adaptive responses to particular caregiving environments. Thompson (1998) argued they may even be adaptive in different ecological contexts. Only disorganised attachment is consistently associated with psychopathology. Moreover, \'earned security\' demonstrates that insecure histories can be overcome.'
+  },
+  {
+    title: 'Misusing \'Critical Period\' When \'Sensitive Period\' Is Correct',
+    why: 'After studying imprinting, students apply \'critical period\' (irreversible window) to human attachment formation.',
+    correct: 'For humans, the correct term is \'sensitive period.\' Unlike strict imprinting, human attachment is not irreversible — children adopted after institutional care can form attachments with adoptive parents (though with more difficulty the later the adoption). The sensitive period concept allows for plasticity and partial recovery, consistent with evidence from intervention studies.'
+  },
+  {
+    title: 'Describing IWMs as \'Memories\' or \'Recordings\' of Childhood',
+    why: 'IWMs are described as though they are accurate records of childhood experiences.',
+    correct: 'IWMs are RECONSTRUCTIONS and INTERPRETATIONS of experience, not accurate recordings. What matters is how the adult currently represents and makes sense of their childhood — not the objective facts of what happened. This is why the AAI predicts infant attachment from narrative coherence and integration (not childhood content), and why therapy can shift IWMs even if the childhood experiences cannot be changed.'
+  },
+  {
+    title: 'Ignoring the Role of Context in Cross-Cultural Differences',
+    why: 'Students conclude that Japanese infants are less securely attached than German infants because of different rates in the Strange Situation.',
+    correct: 'Cross-cultural differences in Strange Situation classifications reflect differences in what the procedure MEANS in different cultural contexts, NOT differences in the prevalence of secure attachment. The Strange Situation is more stressful for Japanese infants (who rarely experience brief separations) and less stressful for German infants (trained early in independence). Secure attachment may be universal; its behavioural expression is culturally variable.'
+  },
+  {
+    title: 'Claiming Child Care Automatically Harms Attachment',
+    why: 'Students interpret any mention of child care with: \'Bowlby said child care harms attachment, and studies confirm this.\'',
+    correct: 'The evidence does NOT support a simple \'child care = insecure attachment\' conclusion. Clarke-Stewart & Allhusen (2002) found no evidence that child care prevents formation of parent-infant attachment. The NICHD study showed that child care quality, maternal sensitivity, and family stress all matter more than mere enrollment in child care. Good quality day care can even compensate for lower-quality parenting (Howes, 1999).'
+  }
+];
+
+// ══════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════
+let viewedConcepts = new Set();
+let quizCards = [...CONCEPTS];
+let quizIndex = 0;
+let cardFlipped = false;
+let modelAVisible = false;
+let currentBranch = null;
+
+// ══════════════════════════════════════════
+// VIEW CONTROL
+// ══════════════════════════════════════════
+function showView(viewId) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+
+  const viewMap = { home: 'view-home', tables: 'view-tables', quiz: 'view-quiz', mistakes: 'view-mistakes', diagrams: 'view-diagrams' };
+  const el = viewMap[viewId] ? document.getElementById(viewMap[viewId]) : document.getElementById('view-branch');
+  if (el) el.classList.add('active');
+
+  // Highlight nav
+  document.querySelectorAll('.nav-item').forEach(n => {
+    if (n.dataset.view === viewId || n.dataset.view === 'branchA' && viewId === 'home') return;
+    if (n.onclick && n.onclick.toString().includes(`'${viewId}'`)) n.classList.add('active');
+  });
+  const homeNav = document.querySelector('[data-view="home"]');
+  if (viewId === 'home' && homeNav) homeNav.classList.add('active');
+
+  if (viewId === 'quiz') initQuiz();
+  if (viewId === 'mistakes') renderMistakes();
+}
+
+function showBranch(letter) {
+  currentBranch = letter;
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById('view-branch').classList.add('active');
+
+  const branch = BRANCHES[letter];
+  document.getElementById('branch-view-badge').textContent = `Branch ${letter}`;
+  document.getElementById('branch-view-badge').style.color = branch.color;
+  document.getElementById('branch-view-title').textContent = branch.name;
+
+  const concepts = CONCEPTS.filter(c => c.branch === letter);
+  renderConceptCards(concepts, letter);
+
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => {
+    if (n.dataset.view === `branch${letter}`) n.classList.add('active');
+  });
+}
+
+// ══════════════════════════════════════════
+// CONCEPT CARDS
+// ══════════════════════════════════════════
+function renderConceptCards(concepts, branch) {
+  const container = document.getElementById('branch-concepts');
+  const color = BRANCHES[branch].color;
+
+  container.innerHTML = concepts.map(c => `
+    <div class="concept-card" id="card-${c.id}">
+      <div class="concept-card-header" onclick="toggleCard(${c.id})">
+        <span class="concept-num">#${String(c.id).padStart(2,'0')}</span>
+        <span class="concept-name">${c.name}</span>
+        <span class="concept-tag" style="background:${color}22; color:${color};">Branch ${c.branch}</span>
+        <span class="expand-icon">⌄</span>
+      </div>
+      <div class="concept-body">
+        <div class="concept-grid">
+          <div class="concept-section">
+            <div class="concept-section-label">📌 Definition</div>
+            <div class="concept-section-text">${c.definition}</div>
+          </div>
+          <div class="concept-section">
+            <div class="concept-section-label">🔍 Explanation</div>
+            <div class="concept-section-text">${c.explanation}</div>
+          </div>
+          <div class="concept-section full">
+            <div class="concept-section-label">💡 Example</div>
+            <div class="concept-section-text">${c.example}</div>
+          </div>
+        </div>
+        <div class="exam-box">
+          <div class="exam-box-label">⭐ Exam Question & Model Answer</div>
+          <div class="exam-q">${c.examQ}</div>
+          <div class="model-a"><strong style="color:var(--gold-light)">Model Answer:</strong> ${c.modelA}</div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function toggleCard(id) {
+  const card = document.getElementById(`card-${id}`);
+  const wasOpen = card.classList.contains('open');
+  card.classList.toggle('open');
+  if (!wasOpen) {
+    viewedConcepts.add(id);
+    updateProgress();
+  }
+}
+
+function updateProgress() {
+  const pct = (viewedConcepts.size / 40) * 100;
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-count').textContent = `${viewedConcepts.size} / 40`;
+}
+
+// ══════════════════════════════════════════
+// TABLES
+// ══════════════════════════════════════════
+function showTable(idx) {
+  document.querySelectorAll('.table-tab').forEach((t, i) => {
+    t.classList.toggle('active', i === idx);
+  });
+  document.querySelectorAll('.table-content').forEach((t, i) => {
+    t.style.display = i === idx ? 'block' : 'none';
+  });
+}
+
+// ══════════════════════════════════════════
+// QUIZ
+// ══════════════════════════════════════════
+function initQuiz() {
+  renderQuizProgressDots();
+  showCard(quizIndex);
+}
+
+function filterQuiz(branch) {
+  document.querySelectorAll('#quiz-filter .filter-btn').forEach(b => b.classList.toggle('active', b.dataset.branch === branch));
+  if (branch === 'all') {
+    quizCards = [...CONCEPTS];
+  } else {
+    quizCards = CONCEPTS.filter(c => c.branch === branch);
+  }
+  quizIndex = 0;
+  cardFlipped = false;
+  document.getElementById('flashcard').classList.remove('flipped');
+  document.getElementById('quiz-total').textContent = quizCards.length;
+  renderQuizProgressDots();
+  showCard(0);
+}
+
+function shuffleQuiz() {
+  quizCards = quizCards.sort(() => Math.random() - 0.5);
+  quizIndex = 0;
+  cardFlipped = false;
+  document.getElementById('flashcard').classList.remove('flipped');
+  renderQuizProgressDots();
+  showCard(0);
+}
+
+function renderQuizProgressDots() {
+  const track = document.getElementById('quiz-progress-track');
+  track.innerHTML = quizCards.map((_, i) => `<div class="qp-dot ${i < quizIndex ? 'done' : i === quizIndex ? 'current' : ''}"></div>`).join('');
+}
+
+function showCard(idx) {
+  const c = quizCards[idx];
+  if (!c) return;
+  document.getElementById('fc-branch-label').textContent = `Branch ${c.branch} — ${BRANCHES[c.branch].name}`;
+  document.getElementById('fc-branch-label').style.color = BRANCHES[c.branch].color;
+  document.getElementById('fc-num').textContent = `#${String(c.id).padStart(2,'0')}`;
+  document.getElementById('fc-question').textContent = c.name;
+  document.getElementById('fc-definition').textContent = c.definition;
+  document.getElementById('fc-example').textContent = `Example: ${c.example}`;
+  document.getElementById('quiz-exam-q').textContent = c.examQ;
+  document.getElementById('quiz-model-a').textContent = c.modelA;
+  document.getElementById('quiz-model-a').style.display = 'none';
+  document.getElementById('quiz-model-toggle').textContent = '▸ Show Model Answer';
+  modelAVisible = false;
+  document.getElementById('quiz-current').textContent = idx + 1;
+  document.getElementById('quiz-total').textContent = quizCards.length;
+  document.getElementById('flashcard').classList.remove('flipped');
+  cardFlipped = false;
+  renderQuizProgressDots();
+}
+
+function flipCard() {
+  cardFlipped = !cardFlipped;
+  document.getElementById('flashcard').classList.toggle('flipped', cardFlipped);
+}
+
+function nextCard() {
+  if (quizIndex < quizCards.length - 1) {
+    quizIndex++;
+    showCard(quizIndex);
+  }
+}
+
+function prevCard() {
+  if (quizIndex > 0) {
+    quizIndex--;
+    showCard(quizIndex);
+  }
+}
+
+function toggleModelA() {
+  modelAVisible = !modelAVisible;
+  document.getElementById('quiz-model-a').style.display = modelAVisible ? 'block' : 'none';
+  document.getElementById('quiz-model-toggle').textContent = modelAVisible ? '▾ Hide Model Answer' : '▸ Show Model Answer';
+}
+
+// ══════════════════════════════════════════
+// MISTAKES
+// ══════════════════════════════════════════
+function renderMistakes() {
+  const container = document.getElementById('mistakes-container');
+  container.innerHTML = MISTAKES.map((m, i) => `
+    <div class="mistake-card">
+      <div class="mistake-header">
+        <div class="mistake-icon">⚠️</div>
+        <div class="mistake-title">Mistake #${i+1}: ${m.title}</div>
+      </div>
+      <div class="mistake-wrong">
+        <div class="mistake-wrong-label">✗ Why students get this wrong</div>
+        ${m.why}
+      </div>
+      <div class="mistake-correct">
+        <div class="mistake-correct-label">✓ Correct understanding</div>
+        ${m.correct}
+      </div>
+    </div>
+  `).join('');
+}
+
+// ══════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+  renderMistakes();
+  initQuiz();
+});
+</script>
+</body>
+</html>
